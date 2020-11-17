@@ -1,0 +1,50 @@
+;Author:Adriano Pereira
+;All-purporse programm
+;V:2019.03.25
+ 
+;General Configurations-----------------------------------
+N100 $AC_TIMER[1]=0	;Start Timer
+N110 G91		;Relative Coordinates
+N120 G71		;Metric System
+N130 G64		;
+N140 M55		;Home Laser Channel
+N150 G4F4		;necessary delay for positioning of the mirror
+N270 M0	   	  	;wait for user-input
+
+;R-Parameters----------------------------------------------
+N170 R0=15             	;Laser Power
+N180 R1=0              	;Feed Rate PROCESS ON
+N190 R2=0              	;Feed Rate PROCESS OFF
+N200 R3=0          		;Powder Flow
+N210 R4=0          		;X-AXIS
+
+;Process Start-up------------------------------------------
+N240 M56		           ;set channel 1 as laser-source 
+N250 G4F4		          ;necessary delay for positioning of the mirror
+N260 M78           	    ;GAS 1 ON
+;N260 M76            	  ;CROSSJET ON
+N270 M0	   	  	   ;wait for user-input
+ 
+;Laser On and Path-----------------------------------------
+
+N280 M64		;CARRIER ON
+;N290 H2=R3	  ;SET POWDER FLOW
+;N300 M62		;POWDER MIXER ON
+;N310 M66		;POWDER FEED ON
+;N320 G4 F4	  ;DELAY FOR POWDER STABILIZATION
+
+N330 H1=R0
+N340 ID=1 WHEN $AC_TIMER[1]>=0 DO M50 
+N300 G4 F0.5
+N340 ID=1 WHEN $AC_TIMER[1]>=0 DO M51 
+
+N330 M65		;CARRIER OFF
+;N340 M63		;POWDER MIXER OFF
+;N350 M67		;POWDER FEED OFF
+ 
+;End of Program--------------------------------------------
+N360 G4 F3
+;N320 M77       ;CROSSJET OFF
+N370 M79        ;GAS 1 OFF
+N380 M55		;home laser ressonator
+N390 M30		;program end
