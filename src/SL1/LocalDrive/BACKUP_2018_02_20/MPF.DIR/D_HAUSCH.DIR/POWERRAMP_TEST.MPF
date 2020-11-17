@@ -1,0 +1,24 @@
+N270 
+;General Config.--------------------
+N100 G91			;relative positioning
+N110 G641			;
+N120 G603			;
+N130 M55			;home mirror
+N140 G4F4			;necessary delay for positioning of the mirror				
+N150 M0			;wait for user-input
+
+;R-Parameters-----------------------
+N160 R51=500
+N170 R52=1000
+N180 R53=0
+N190 R54=30
+N200 R55=0.5
+N210 R56=2000
+N220 R57=0.01
+N230 R58=2
+
+N240 LEISTUNGSRAMPE_XY
+
+;End of Programm--------------------
+N250 M55				;home mirror
+N260 M30				;program end

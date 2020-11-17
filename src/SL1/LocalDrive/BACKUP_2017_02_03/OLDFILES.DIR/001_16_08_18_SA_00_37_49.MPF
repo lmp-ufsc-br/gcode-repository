@@ -1,0 +1,34 @@
+;Processo: Soldagem autogena
+;Velocidade(m/min): 0,5 a 4 
+;Potencia (kW): 10
+;Espessura(mm): 
+;Material: 1020
+
+;Configuracoes gerais
+G64 
+G54 
+M55 
+G4F4 
+
+;Verificacao da focagem e ou posição da peça (nao obrigatorio)
+G0 X0 Y-5 Z100 
+G1 Z0 F1000
+M0 
+
+;Inicio do procedimento. Decrição do procedimento
+M56 
+G4F4
+M51 H10000
+G1 Y0 F500
+G1 Y30 F500
+G1 Y60 F1000
+G1 Y90 F2000
+G1 Y120 F4000
+G1 Y140 Z-5 F500
+G1 Y170 F500
+G1 Y200 F1000
+
+;Finalizando o programa
+M50
+M55
+M30

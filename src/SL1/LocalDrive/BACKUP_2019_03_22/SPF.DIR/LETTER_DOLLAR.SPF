@@ -1,0 +1,36 @@
+;Author: FRANCISCO R.
+;Dollar
+;It draws the dollar symbol in accordance with the standart size and variables
+
+N100 PROC LETTER_DOLLAR
+
+;General Config.--------------------
+N110 G71			; Metric system units (just length)
+N120 G91			; Relative coordinates
+
+;Laser On and Path------------------
+N140 G0 Y=-R2
+N150 G0 X=-((R1-R2)/4)
+N160 M50 				;laser on
+N170 G1 Y=(3*(R2/4)) F=R4
+N180 G3 X=-R2/4 Y=R2/4 CR=R2/4
+N190 G1 X=-((R1-R2)/4)
+N200 G3 X=-R2/4 Y=-R2/4 CR=R2/4
+N210 G1 Y=-R2/2
+N220 G2 X=-R2/4 Y=-R2/4 CR=R2/4
+N230 G1 X=-((R1-R2)/4)
+N240 G2 X=-R2/4 Y=R2/4 CR=R2/4
+N250 G1 Y=(3*(R2/4))
+N260 M51 				;laser off
+N270 G0 Y=-R2/4
+N280 G0 X=-(R1-R2)/4
+N290 M50 				;laser on
+N300 G1 X=R1 
+N310 M51 				;laser off
+N320 G0 Y=-R2/2
+N330 M50 				;laser on
+N340 G1 X=-R1
+N350 M51 				;laser off
+N360 G0 Y=-R2/4-R3 X=R1
+;End of subprogram--------------------
+N370 RET

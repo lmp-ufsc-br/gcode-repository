@@ -1,0 +1,47 @@
+;Author: Stefan Gnaase
+;program is used to create a one-layer surface in shape of a rectangle
+
+;definition of sample parameters
+R0=25					;width(Y-length) of the rectangle
+R1=25					;height(X-length) of the rectangle
+R2=2300					;feedrate of the axis
+R3=1					;distance between each line
+R4=R0/R3				;number of lines 
+R5=2000					;feedrate of the clad
+
+G0 X-5					;go to starting position, 5mm from upper left corner
+G0 Y-5					;go to starting position, 5mm from upper left corner
+
+;general configurations
+G91						;relative positioning
+G64						;turn off delay due to reading of comments
+;M55					;home mirror
+;G4F4					;necessary delay for positioning of the mirror
+
+;verify the laserfocus
+;G1 X0 Y0 Z50 F500		;quick movement to position zero
+;G1 Z-50 F500				
+M0						;stop program until next input
+
+;process-start
+;M56					;set canal 1 as laser-source
+;G4F4					;necessary delay for positioning of the mirror
+;M0
+
+;POWDER START
+;G4F15
+
+;create rectangle-pattern
+;H1500 M50 			;turn laser on with 1500Watt 
+LINE:				;start loop "LINE"
+	Y=-R0 F=R5		;move in Y-direction 
+	X=-R3 F=R5		;move in X-direction
+	Y=R0 F=R5		;move in Y-direction 
+	X=-R3 F=R5		;move in X-direction
+REPEAT LINE P=R4-1	;end loop "LINE"
+;M51			;turn laser off
+
+
+;end of the program
+;M55					;home mirror
+M30						;program end

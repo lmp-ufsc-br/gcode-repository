@@ -1,0 +1,61 @@
+;Author: Rafael Petters da Cunha
+;Single bead thin wall deposition in round parts 
+;Data: 30/09/2019
+
+;General Configurations-----------------------------------
+N100 $AC_TIMER[1]=0		;
+N110 G91			;relative positioning
+N120 G71			;metric
+N130 G64			;turn off delay due to reading of comments
+N140 M55			;move laser mirror to home
+N150 G4F4			;Delay in seconds
+N160 M0			;wait for user-input
+
+;R-Parameters---------------------------------------------
+N170 R0=0			;Laserpower
+N180 R7=230		   	;Inicial Radius
+N190 R9=1.5	  		;Bead height
+N200 R10=1.2	      	 	;Layer height
+N210 R12=2000			;Tangential speed
+N220 R14=500			;Vertical movements speed 
+N230 R15=6			;Final deposition height
+N240 R16=0			;Powder feedrate
+
+
+;R8			;Actuall Radius
+
+;Process Start-up------------------------------------------
+N250 M56			;Move laser mirror to Channel 1
+N260 G4F4			;Delay in seconds
+N270 M78			;Shielding Gas ON!!!!!!!!!!
+N280 M0				;wait for user-input
+
+;Laser On and Path----------------------------------------
+
+N290 H1=R0			;Set laser power
+N300 H2=R16			;Set powder feedrate
+N310 R8=R7			;Actuall Radius
+
+N320 M64			;Turn on carrier gas
+N330 M66			;Turn on powder feeder
+
+
+N340 WHILE(R15>=(R8-R7))
+N350  ID=1 WHEN $AC_TIMER[1]>=0 DO M50
+N360  R13=(R12*360)/(2*R8*3.141516)	;Rotating speed
+N370  G1 A=-360	F=R13	;Layer deposition
+N380  ID=1 WHEN $AC_TIMER[1]>=0 DO M51
+N390  G1 Z=R10	F=R14	;Vertical increase between layers
+N400  R8=R8+R10		;Actuall Radius
+N410 ENDWHILE
+
+N420 M65			;Turn off carrier gas
+N430 M67			;Turn off powder feeder
+
+;End of Subprogramm--------------------
+N440 G4 F3			;
+N450 M79			;Shielding Gas ON!!!!!!!!!!
+N460 M55			;Move laser mirror to home
+N470 M30			;End of program
+
+

@@ -1,0 +1,51 @@
+;Author:Francisco Ratusznei
+;It draws 3 squares R1xR2 by N layers
+ 
+;General Configurations-----------------------------------
+N100 $AC_TIMER[1]=0 
+N110 G91			;relative positioning
+N120 G641		   ;turn off delay due to reading of comments
+N130 G603		   ;interpolate the end of the line
+N140 M55			;home mirror
+N150 G4F4		   ;necessary delay for positioning of the mirror				
+N160 M0			 ;stop program until next input
+
+;R-Parameters-----------------------
+
+
+N170 R0=6488              ;LASER POWER
+N180 R50=800        	  ;Feed Rate
+N190 R40=3                ;CLAD WIDTH
+N200 R41=0.3              ;OVERLAPPING
+N210 R1=27				;X-axis
+N220 R2=77				;Y-axis
+N230 R8=(R40*(1-R41)) 	  ;Space bettwen lines
+N240 R3=TRUNC(R1/R8)	  ;Number of lines (real number)
+N250 R9=0
+N260 R10=1                      ;Number of Squares
+N270 R11=0                      ;INCRECREMENT VARIABLE
+N280 R12=0                      ;INCREMENT VARIABLE
+N290 R11=0
+N300 R4=2           	   ;Number of layers
+N310 R14=3                ;Z-STEP
+N320 R15=7                      ;SPACE BETWEEN BLOCKS
+N330 R16=0			   ;POSITIONING VARIABLE
+N340 H=R0
+
+;Process Start-up------------------------------------------
+N350 M56		   ;set canal 1 as laser-source 
+N360 G4F4		   ;necessary delay for positioning of the mirror
+;CROSSJET-POWDER!!!!!!!!!!!!!!!!
+N370 M0			  ;wait for user-input
+
+G1 X=R1 F=R50
+G1 X=R1 F=R50
+ 
+;Laser On and Path-------
+
+;End of Program--------------------------------------------
+N560 M55			;home mirror
+N570 M30			;program end
+
+ 
+

@@ -1,0 +1,81 @@
+;Author: Adriano Pereira
+;program is used to create a column with multiple rows consisting of 
+;one-layer rectangle-shaped clads with different overlappings
+
+;General Configurations-----------------------------------
+;N100 $AC_TIMER[1]=0 
+N100 G91			;relative positioning
+N110 G641			;turn off delay due to reading of comments
+N120 G603			;interpolate the end of the line
+N130 M55			;home mirror
+N140 G4F4			;necessary delay for positioning of the mirror				
+N150 M0				;stop program until next input
+
+;R-Parameters---------------------------------------------
+N160 R0=4006	   	;laserpower
+N170 R1=6		 	;CIRCLE RADIUS
+;N190 R2=               ;
+N180 R3=0.30	   	;overlapping percentage
+N190 R5=300	   	;feedrate X-Y-axis
+N200 R7=2.76	   	;width of the clad determined by earlier tests
+N210 R8=R7*(1-R3)	  ;spacement within lines
+N220 R4=(R1/R8)		;number of lines
+N230 R12=4             ;NUMBER OF LAYERS
+N240 R13=1.82          ;Z-STEP
+
+;Process Start-up------------------------------------------
+N250 M56			;set canal 1 as laser-source
+N260 G4F4			;necessary delay for positioning of the mirror
+N270 M0
+;START POWDER!!!
+N280 M0
+N290 G4F5
+
+;Laser On and Path-----------------------------------------	
+
+N300 R14=0
+N310 WHILE (R14<R12)   					;create rectangle 
+N320 	;------CLADDING
+N330     M0
+N340     H=R0 
+N350 	G1 X=(+R1) F500		          	;move in X- and Y-direction	
+N360 	R10=R1
+N370 	R11=0
+N380 	WHILE (R11<=R4)   					;create rectangle 
+N390    	ID=1 WHEN $AC_TIMER[1]>=0 DO M50 	;turn laser on with preset power
+N400      	G2 X=(-R10*2) Y=(0) I=(-R10) J=(0) F=R5    ;move in Y-direction 
+N410	  	G2 X=(+R10*2) Y=(0) I=(+R10) J=(0) F=R5    ;move in Y-direction
+N420	  	G1 X=-(R8) F=R5		          	;move in Y-direction 
+N430	  	ID=1 WHEN $AC_TIMER[1]>=0 DO M51 	;turn laser off
+N440	  	R10=(R10-R8)
+N450      	R11=R11+1
+N460     ENDWHILE
+N470 	G1 X=+((R8*(TRUNC(R4+1)))-R1) F100          	;move in Y-direction 
+N480 	;------REMELTING
+N490     M0
+N500     H=(R0*0.5)
+N510     G1 X=(+R1) F500		          	;move in X- and Y-direction	
+N520 	R10=R1
+N530 	R11=0
+N540 	WHILE (R11<=R4)   					;create rectangle 
+N550    	ID=1 WHEN $AC_TIMER[1]>=0 DO M50 	;turn laser on with preset power
+N560      	G2 X=(-R10*2) Y=(0) I=(-R10) J=(0) F=R5    ;move in Y-direction 
+N570	  	G2 X=(+R10*2) Y=(0) I=(+R10) J=(0) F=R5    ;move in Y-direction
+N580	  	G1 X=-(R8) F=R5		          	;move in Y-direction 
+N590	  	ID=1 WHEN $AC_TIMER[1]>=0 DO M51 	;turn laser off
+N600	  	R10=(R10-R8)
+N610      	R11=R11+1
+N620     ENDWHILE
+N630 	G1 Z=R13 F100
+N640 	G1 X=+((R8*(TRUNC(R4+1)))-R1) F100          	;move in Y-direction 
+N650     R14=R14+1
+N660 ENDWHILE
+
+N670 M0
+;TURN OFF POWDER!!!
+N680 M0
+N690 G4F5
+
+;End of Programm--------------------
+N700 M55			;home mirror
+N710 M30			;program end

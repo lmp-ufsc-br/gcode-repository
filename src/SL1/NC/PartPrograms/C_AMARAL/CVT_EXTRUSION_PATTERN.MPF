@@ -1,0 +1,126 @@
+; (Author: Calil Amaral)
+; (Description: It draws a geometry that resambles a pulley system, with radius r1 and r2 varying along Z)
+; (Data: 27/09/2019)
+
+; (General Configurations------------------------------------------------------)
+  N100 $AC_TIMER[1]=0   ;  
+  N110 G91			        ; Relative coordinates
+  N120 G71			        ; Set metric system 
+  N130 G64			        ; Continuous path mode
+N140 M55		;Home Laser Channel
+N150 G4F4		;necessary delay for positioning of the mirror
+N160 M0	   	  	;wait for user-input
+
+; (R - Input Geometric Parameters----------------------------------------------)
+  ; (Área de trabalho: 4*R05 x 2*R05)
+N170  R05 = 5                                ; (r2) - (right radius)               [mm]
+N180  R04 = 3                                 ; (rscale) - (rscale max:min)         [-]
+N190  R00 = 0.4                                 ; (dz) - (layer height)               [mm] 
+N200  R01 = 20                                ; (a) - (maximum overhang angle)      [deg]
+N210  R03 = R05/R04                           ; (r1) - (left radius)                [mm]  
+N220  R11 = 0                               ; (x_o1) - (x coordinate of center of arc 1 relative to global XYZ) [mm]
+
+; (R - Input Processing Parameters --------------------------------------------)
+N230  R27 = 350                                ; (v) - (tangential speed)            [?]
+N240  R28 = 23                             ; (P) - (Laser Power)  
+N250  R29 = 2.2                                 ; (%) - (Powder feeder disc RPM)      [RPM] HOW TO CONVERT TO MASS FLOW RATE?
+N260  R30 = 4                                 ; (dt) - (General delay time)         [s]
+
+; (R - Calculated parameters)
+
+  ; (Calculate tangent of alpha and r2)
+N270  R02 = TAN(R01)                          ; (tan a) - (tg alpha)               ;[-]
+N280  R05 = R04 * R03                         ; (r2) - (right radius)               [mm]
+
+  ; (Calculate height, radius and radius variation from layer to layer from equation: dr = dz * tan angle)
+N290  R06 = (R05/R02 - R03/R02)               ; (h) (total height)                 ;[mm]
+N300  R07 = R00 * R02                         ; (dr)                                [mm]
+N310  R08 = R03                               ; (r1_i) - (current left radius)      [mm]  
+N320  R09 = R05                               ; (r2_i) - (current right radius)     [mm]
+
+  ; (Define coordinates of centers o1 and o2 ------------------------------------)
+N330  R10 = 2*R05                             ; (C) - (center distance)             [mm]
+N340  R11 = R11                               ; (x_o1) - (x coordinate of center of arc 1 relative to global XYZ) [mm]
+N350  R12 = R11                               ; (y_o1) - (y coordinate of center of arc 1)  [mm]
+N360  R24 = R11 + R10                         ; (x_o2) - (x_o2 = x_o1 + C; x coordinate of center of arc 2) [mm]
+N370  R25 = R12                               ; (y_o2) - (y_o2 = y_o1; y coordinate of center of arc 2) [mm]
+
+  ; (Calculate position of point A ----------------------------------------------)
+N380  R13 = ASIN( (R09-R08)/R10 )             ; (phi) - (misalignment angle between vertical and tangent point) [mm]
+N390  R14 = R11 - R08*SIN(R13)                ; (x_A) - (x_A = x_o1 - r1_i * sin(phi))  [mm]
+N400  R15 = R12 + R08*COS(R13)                ; (y_A) - (y_A = y_o1 + r1_i * cos(phi))  [mm]
+
+
+
+; (Process Start-up------------------------------------------------------------)
+  N410 M56			; Move laser mirror to channel 1
+  N420 G4F4			; Delay in seconds (4s)
+  N430 M78			; Shielding Gas ON!!!!!!!!!! (gas 1 on)
+  N440 M0				; Wait for command
+
+; (Move to initial position A -------------------------------------------------)
+N450  G01 X=(R14) Y=(R15) F=(R27)            ; (move head to initial position A with laser off)
+
+; (Setup initial process conditions ------------------------------------------)
+N460  M64                                  ; (Carrier gas ON) 
+N470  M33                                  ; (Mixer ON)
+N480  H2 = R29                             ; (Set powder flow)
+N490  M66                                  ; (Powder feed on)
+N500  G4 F=(R30)                           ; (Delay 3s)
+
+; (Deposit material on the designated path for each layer )
+N510  R26 = 0                                ; (h_i) (current height)
+N520  WHILE(R26 < R06)                       ; (while h_i < h, do block 1)
+  
+    ; (Calculate new parameters)
+N530      R16 = R14                            ; (x_B) -> (x_B = x_A)                     [mm]
+N540      R17 = R12 - R08 * COS(R13)           ; (y_B) -> (y_B = y_o1 - r1_i * cos(phi))  [mm]   
+N550      R18 = R24 - R09 * SIN(R13)           ; (x_C) -> (x_C = x_o2 - r2_i * sin(phi))  [mm]
+N560      R19 = R25 - R09 * COS(R13)           ; (y_C)                                    [mm]
+N570      R20 = R18                            ; (x_D)                                    [mm]
+N580      R21 = R25 + R09 * COS(R13)           ; (y_D)                                    [mm]
+N590      H1=R28
+    ; (Laser ON ---------------------------------------------------------------)
+N600      ID=1 WHEN $AC_TIMER[1]>=0 DO M50
+
+    ; (Create the profile using relative positions with arcs AB and BC only)
+N610      G03 X=(R16-R14) Y=(R17-R15) I=(R11-R14) J=(R12-R15)     ;(move around arc from point A to point B)
+N620      G01 X=(R18-R16) Y=(R19-R17)                             ;(move in line from B to C)
+N630      G03 X=(R20-R18) Y=(R21-R19) I=(R24-R18) J=(R25-R19)     ;(move around arc from point C to point D)
+N640      G01 X=(R14-R20) Y=(R15-R21)                             ;(move in line from D to A)  
+
+    ; (Laser OFF --------------------------------------------------------------)
+N650      ID=1 WHEN $AC_TIMER[1]>=0 DO M51 	    ; Desliga laser pointer
+
+    ; (Store old values of Ax and Ay for future calculations)
+N660      R22 = R14                             ; (x_A_i = x_A) (store old value of Ax) [mm]
+N670      R23 = R15                             ; (y_A_i = y_A) (store old value of Ay) [mm]
+
+    ; (Calculate new parameters for next loop)  
+N680      R08 = R08 + R07                       ; (r1_i+1 = r1_i + dr)              [mm]
+N690      R09 = R09 - R07                       ; (r2_i+1 = r2_i - dr)              [mm]
+N700      R13 = ASIN( (R09-R08)/R10 )           ; (phi_i+1 = asin((r2_i+1 - r1_i+1)/C)) (calculate new phi) [deg]
+N710      R11 = R11 + R07                       ; (x_o1_i+1 = x_o1_i + dr) (x coordinate of center of arc 1 relative to global XYZ) [mm]
+N720      R24 = R11 + R10                       ; (x_o2_i+1 = x_o1_i+1 + C) (x_o2 = x_o1 + C; x coordinate of center of arc 2)  [mm]
+N730      R14 = R11 - R08*SIN(R13)              ; (x_A_i+1 = x_o1_i+1 - r1_i+1 * sin(phi_i+1))     (calculate new Ax)           [mm]
+N740      R15 = R12 + R08*COS(R13)              ; (y_A_i+1 = y_o1 + r1_i+1 * cos(phi_i+1)) (calculate new Ay)                   [mm]
+    
+    ; (Reposition in new point A)
+N750      G01 X=(R14-R22) Y=(R15-R23) Z=(R00)   ; (move to next point A using relative position)
+
+    ; (Update counter)
+N760      R26 = R26 + R00                       ; (h_i+1 = h_i + dz)
+
+N770  ENDWHILE
+
+; (Setup final process conditions)
+N780  M67                                  ; (Powder feed OFF)
+N790  M63                                  ; (Mixer OFF)
+N800  M65                                  ; (Carrier gas OFF)
+ 
+
+;End of Program--------------------------------------------
+  N810 G4 F3		; Delay in seconds
+  N820 M79			; Shielding gas off (gas 1 off)
+  N830 M55			; Move laser mirror to home
+  N840 M30			; End of program

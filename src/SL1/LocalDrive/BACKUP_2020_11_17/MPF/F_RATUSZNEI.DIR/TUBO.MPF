@@ -1,0 +1,115 @@
+N100 $AC_TIMER[1]=0 
+;Author: Adriano Pereira
+;This program creates 48 linear beads arranged in colummns and rowss accordinly
+;to the lab's standart laser cladding sample.
+
+;General Configurations-----------------------------------
+N110 G91			;relative positioning
+N120 G641			;turn off delay due to reading of comments
+N130 G603			;interpolate the end of the line
+N140 M55			;home mirror
+N150 G4F4			;necessary delay for positioning of the mirror				
+N160 M0				;stop program until next input
+
+;R-Parameters---------------------------------------------
+N170 R1=2.3427
+N180 R2=2.0824
+N190 R3=1.8221
+N200 R4=1.5618
+N500 R5=1.3015
+N510 R6=22.9641
+N520 R7=5.7410
+N530 R8=216.475
+N531 R9=688.9271
+N532 R10=0
+N540 H=39.00
+
+;Process Start-up------------------------------------------
+N210 M56		;set canal 1 as laser-source
+N220 G4F4		;necessary delay for positioning of the mirror
+N230 M0			;TÃ_DÃ-DÃ-DÃ...
+
+;Laser On and Path-----------------------------------------	
+
+
+;STARTING POWDER!!!!
+N240 M62	;POWDER MIXER ON
+N250 M64	;CARRIER GAS ON
+N260 M66	;POWDER ON
+N270 G4F10	
+N280 M0
+N480 H1=39.00
+
+
+N282 	ID=1 WHEN $AC_TIMER[1]>=0 DO M50
+N281        G1 A=(R6) F=R9
+N282     ID=1 WHEN $AC_TIMER[1]>=0 DO M51 
+N283     G1 A=(R7) F=R9
+
+
+N282 	ID=1 WHEN $AC_TIMER[1]>=0 DO M50
+N281        G1 A=(R6) F=R9
+N282     ID=1 WHEN $AC_TIMER[1]>=0 DO M51 
+N283     G1 A=(R7) F=R9
+
+
+N282 	ID=1 WHEN $AC_TIMER[1]>=0 DO M50
+N281        G1 A=(R6) F=R9
+N282     ID=1 WHEN $AC_TIMER[1]>=0 DO M51 
+N283     G1 A=(R7) F=R9
+
+N282 	ID=1 WHEN $AC_TIMER[1]>=0 DO M50
+N281        G1 A=(R6) F=R9
+N282     ID=1 WHEN $AC_TIMER[1]>=0 DO M51 
+N283     G1 A=(R7) F=R9
+
+N282 	ID=1 WHEN $AC_TIMER[1]>=0 DO M50
+N281        G1 A=(R6) F=R9
+N282     ID=1 WHEN $AC_TIMER[1]>=0 DO M51 
+
+
+N283     G1 A=(R7+R8) U=R1 F=(360*5)
+
+N482 WHILE(R10<4)
+N282 	ID=1 WHEN $AC_TIMER[1]>=0 DO M50
+N281        G1 A=(R6) F=R9
+N282     ID=1 WHEN $AC_TIMER[1]>=0 DO M51 
+N283     G1 A=(R7) U=-(R1-R2) F=R9
+
+
+N282 	ID=1 WHEN $AC_TIMER[1]>=0 DO M50
+N281        G1 A=(R6)  F=R9
+N282     ID=1 WHEN $AC_TIMER[1]>=0 DO M51 
+N283     G1 A=(R7) U=-(R2-R3) F=R9
+
+
+N282 	ID=1 WHEN $AC_TIMER[1]>=0 DO M50
+N281        G1 A=(R6)  F=R9
+N282     ID=1 WHEN $AC_TIMER[1]>=0 DO M51 
+N283     G1 A=(R7) U=-(R3-R4) F=R9
+
+N282 	ID=1 WHEN $AC_TIMER[1]>=0 DO M50
+N281        G1 A=(R6)  F=R9
+N282     ID=1 WHEN $AC_TIMER[1]>=0 DO M51 
+N283     G1 A=(R7) U=-(R4-R5) F=R9
+
+N282 	ID=1 WHEN $AC_TIMER[1]>=0 DO M50
+N281        G1 A=(R6)  F=R9
+N282     ID=1 WHEN $AC_TIMER[1]>=0 DO M51 
+N283     G1 A=(R7+R8) U=((R1-R5)+R1) F=(360*5)
+N284     R10=R10+1
+N571     ENDWHILE
+
+ 
+
+N420 M63	;POWDER MIXER OFF
+N430 M65	;CARRIER GAS OFF
+N440 M67	;POWDER OFF
+
+;End of Programm--------------------
+N450 G4F5
+N460 M55			;home mirror
+N470 M30			;program end
+
+ 
+

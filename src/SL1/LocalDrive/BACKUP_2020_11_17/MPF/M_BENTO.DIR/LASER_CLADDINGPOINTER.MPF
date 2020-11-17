@@ -1,0 +1,81 @@
+;Author: Matheus Ferreira Bento
+;Description: It is a program to a laser cladding with wire.
+;Data: 27/09/2019
+ 
+;General Configurations-----------------------------------
+N100 $AC_TIMER[1]=0		;
+N100 G91			;relative coordinates
+N110 G71			;metric dimension
+N110 G60			;exact stop, modal
+N130 M55			;move laser mirror to home
+N140 G4F4			;delay
+N150 M0				;wait for command
+
+;R-Parameters---------------------------------------------
+N160 R0=48			;laser power
+N170 R1=30			;substrate lenght
+N180 R2=20			;substrate width
+N200 R4=1.9			;parameter width
+N210 R5=1000               	;speed with laser on
+N220 R6=0.2 			;overlap
+N222 R8=4000                    ;speed with laser off
+N223 R9=0.9                     ;parameter height - z axis moving
+N224 R50=2                      ;number of layers
+N225 R7=(1-R6)*R4               ;distance between lines
+N226 R3=(R2/R7) 		;number of lines in y axis
+
+;Process Start-up------------------------------------------
+N230 M56			;move laser mirror to channel 1
+N240 G4F4			;4 seconds delay for optic positioning
+N241 M76			;CROSSJET!!!!!!!!!!
+N250 M0				;wait for command
+
+;Laser On and Path-----------------------------------------
+
+
+N260 R10=0
+ 
+N270 WHILE R10<R50
+  
+N280 R11=1
+
+  N290 WHILE R11<=R3
+
+  N300 H1=R0				;set laser power
+  N310 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;laser on
+  N320 M78	                        ;wire feeding 
+  N330 G1 X=(R1-2) F=R5
+  N340 M79                              ;stop wire feeding
+  N350 G1 X=2                          ;
+  N360 ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;laser off
+  N370 G1 X=-R1 Y=-(R7) F=R8              ;ready to next line
+  
+  N380 R11=R11 + 1
+
+  N390 ENDWHILE
+
+N400 G1 Y=((R3*R7)-1) Z=R9 
+N410 R10=R10 + 1
+
+N420 ENDWHILE
+
+;End of Program--------------------------------------------
+N430 G4F5                       ;delay to cross jet off
+N440 M77			;cross jet off
+N450 M55			;
+N460 M30			;end of program
+
+
+
+;tirei TRUNC do R3
+
+
+
+
+
+
+
+
+
+
+ 

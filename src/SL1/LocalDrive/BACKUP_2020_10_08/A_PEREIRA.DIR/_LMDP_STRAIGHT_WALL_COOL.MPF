@@ -1,0 +1,64 @@
+;Author: Adriano Pereira
+;program is used to create a column with multiple rows consisting of 
+;one-layer rectangle-shaped clads with different overlappings
+
+;General Configurations-----------------------------------
+N100 $AC_TIMER[1]=0	;Start Timer
+N110 G91		;Relative Coordinates
+N120 G71		;Metric System
+N130 G64		;
+N140 M55		;Home Laser Channel
+N150 G4F4		;necessary delay for positioning of the mirror
+N160 M0	   	  	;wait for user-input	
+
+;R-Parameters---------------------------------------------
+N170 R0=62.9		;Laser power
+N180 R1=2.17		;Powder flow
+N190 R2=28		;X-length
+N200 R3=300		;Feedrate laser ON
+N210 R4=1000		;Feedrate laser OFF
+N220 R5=9		;N. of Layers
+N230 R6=1.28		;Z-STEP
+;R7=Layers counter
+N240 R8=20          ;COOLDOWN BETWEEN LAYERS
+ 
+;Process Start-up------------------------------------------
+N250 M56		;set channel 1 as laser-source
+N260 G4F4		;necessary delay for positioning of the mirror
+N270 M78		;GAS 1 ON
+N280 M0
+
+;Laser On and Path-----------------------------------------	
+
+N290 H1=R0
+N300 H2=R1		;Set Powder Flow
+
+N310 R7=0
+N320 WHILE (R7<R5)
+N330    M78		;Shielding Gas ON	
+N340    M64		;Carrier Gas ON
+N350    M62		;Powder Mixer ON
+N360    M66		;Powder Feed ON
+N370    H1=R0
+N380    G4 F5		;Delay for Powder Flow Stabilization 
+;N390	ID=1 WHEN $AC_TIMER[1]>=0 DO M50
+N390    M50
+N400	G1 X=+(R2) F=R3
+;N410	ID=1 WHEN $AC_TIMER[1]>=0 DO M51
+N410    M51
+N420    G1 Z=+(R6) F500			
+N430	G1 X=-(R2) F=R4
+N440    R5=R5-1
+N450    M63		;Powder Mixer OFF
+N460    M67		;Powder Feed OFF
+N470    M65		;Carrier Gas OFF
+N480    M79		;Shielding Gas OFF
+N490    G4 F=R8
+N500 ENDWHILE
+
+
+;End of Programm---------------------------------------------
+N510 G4 F3
+N520 M79            	;GAS 1 OFF
+N530 M55		;home laser ressonator
+N540 M30		;program end

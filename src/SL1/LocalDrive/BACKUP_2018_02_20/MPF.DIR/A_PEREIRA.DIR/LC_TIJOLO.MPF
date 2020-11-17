@@ -1,0 +1,66 @@
+;Author: Adriano Pereira
+;Nugget Rules
+;Path is fixed
+;Laser Power, Traverse Speed and Z-Step are the Variables
+
+;General Config.--------------------
+G91			;relative positioning
+G641			;turn off delay due to reading of comments
+G603			;
+M55			;home mirror
+G4F4			;necessary delay for positioning of the mirror				
+M0			;wait for user-input
+
+;R-Parameters-----------------------
+R0=1500			;Laser Power
+R1=3000			;Traverse Speed
+R2=0.3			;Z-Step
+R3=0.8			;Overlapping
+R4=1.38			;Clad Width
+R5=(R3*R4)		;Spacement between lines
+R7=25			;Line lenght
+R8=10			;Number of Lines
+R9=2.5          	;compensation (pulo do gato)
+
+;Process Start-up-------------------
+M56			;set canal 1 as laser-source
+G4F4			;necessary delay for positioning of the mirror
+M0			;wait for user-input
+;START POWDER!!!
+G4F10
+
+;G1 X0 Y5 F250
+
+;Laser On and Path------------------
+
+H=R0 
+DoubleLayer:
+Layer1:
+	M50
+	G1 Y=-(R7) F=R1
+	M51
+	G1 X=-(R5) Y=(R7) F500
+REPEAT Layer1 P=(R8-1)
+
+G1 X=(R5*R8) Y=-(R7+R9) F500
+G1 Z=R2 F500
+Layer2:
+	M50
+	G1 Y=(R7) F=R1
+	M51
+	G1 X=-(R5) Y=-(R7) F500
+REPEAT Layer2 P=(R8-1)
+
+G1 X=(R5*R8) Y=(R7+R9) F500
+G1 Z=R2 F500
+
+REPEAT DoubleLayer P=2
+
+M0
+;TURN OFF POWDER!!!
+M0
+G4F10
+
+;End of Programm--------------------
+M55				;home mirror
+M30				;program end

@@ -1,0 +1,72 @@
+;Autor: Marcos
+;Description:
+
+;GENERAL CONF -----------------------------------------------------------------------------------------------------------------------------
+N100 $AC_TIMER[1]=0                     ;
+N110 G71                                ;metric sistem
+N120 G91                                ;coordenadas relativas
+N130 M55                                ;move laser mirror to home
+N140 G4F5                               ;delay
+N150 M0                                 ;wait for command
+
+;R-PARAMETER ------------------------------------------------------------------------------------------------------------------------------
+
+N160 R0=00                               ;laser power 
+N170 R1=1000                               ;process velocity (m/min) 
+N180 R2=50                               ;bead lenght (mm)
+N190 R3=20                               ;minimum lenght (mm)
+N200 R5=1                               ;Z increase
+N210 R6=3                               ;bead width
+N220 R7=2.5                               ;bead height
+N230 R8=1.5                               ;powder flow
+N240 R9=30                               ;angle
+
+;PROCESS START-UP --------------------------------------------------------------------------------------------------------------------------
+N250 M56                                ;move laser mirror to Channel 1
+N260 G4F3                               ;delay
+N270 M76                                ;cross-jet on
+N280 M0                                 ;wait for command
+
+
+;LASER ON & PATH ----------------------------------------------------------------------------------------------------------------------------
+
+N290 H1=R0                                             ;laser power
+N300 H2=R8                                             ;powder flow
+N310 R10=0                                             ;layer number
+N320 R4=TAN(R9)*R7
+N330 M78                                               ;Gas 1 on
+N340 M64                                               ;Carrier Gas on
+N350 M66                                               ;Powder feed on
+N360 WHILE(R2>R3)
+
+N370        IF(R10<1)
+N380          ID=1 WHEN $AC_TIMER[1]>=0 DO M50         ;Laser on 
+N390          G1 Y=+(R2) F=R1
+N400          G1 X=+(R2)
+N410          G1 Y=-(R2)
+N420          G1 X=-(R2)
+N430          ID=1 WHEN $AC_TIMER[1]>=0 DO M51         ;Laser off
+N440          R10=R10+1
+N450        ENDIF
+N460    G1 Y=R4 X=R4 Z=R7*R5    
+N470    R20=(R2-(2*R4))                                    ;Variable
+N480    ID=1 WHEN $AC_TIMER[1]>=0 DO M50               ;Laser on 
+N490    G1 Y=+(R20)
+N500    G1 X=+(R20)
+N510    G1 Y=-(R20)
+N520    G1 X=-(R20)
+N530    R2=(R2-(2*R4))
+N540    ID=1 WHEN $AC_TIMER[1]>=0 DO M51               ;Laser off
+N550 ENDWHILE
+
+N560 M67                                               ;Powder feed off
+N570 M65                                               ;Carrier Gas off
+N580 M79                                               ;Gas 1 off
+
+
+
+;END PROGRAM -------------------------------------------------------------------------------------------------------------------------------------------
+
+N590 G4F3                               ;delay
+N600 M55                                ;move laser mirror to home
+N610 M30                                ;end of program

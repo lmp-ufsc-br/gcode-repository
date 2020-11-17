@@ -1,0 +1,185 @@
+        
+N300 H1=15.00
+N310             ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power
+N320 M0
+N330         ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off
+N340 M0 
+N350 H1=20.00
+N360              ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power
+N370 M0
+N380         ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off
+N390 M0
+        
+N400 H1=25.00
+N410             ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power
+N420 M0
+N430         ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off
+N440 M0 
+N450 H1=30.00
+N460              ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power
+N470 M0
+N480         ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off
+N490 M0
+        
+N500 H1=40.00
+N510             ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power
+N520 M0
+N530         ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off
+N540 M0 
+N550 H1=50.00
+N560              ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power
+N570 M0
+N580         ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off
+N590 M0
+        
+N600 H1=60.00
+N610             ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power
+N620 M0
+N630         ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off
+N640 M0 
+N650 H1=70.00
+N660              ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power
+N670 M0
+N680         ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off
+N690 M0
+        
+N700 H1=80.00
+N710             ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power
+N720 M0
+N730         ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off
+N740 M0 
+N750 H1=90.00
+N760              ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power
+N770 M0
+N780         ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off
+N790 M0
+        
+N800 H1=100.00
+N810             ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power
+N820 M0
+N830         ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off
+N820 
+;Author:Francisco Ratusznei
+;It draws 3 squares R1xR2 by N layers
+ 
+;General Configurations-----------------------------------
+N100 $AC_TIMER[1]=0 
+N110 G91			;relative positioning
+N120 G641		   ;turn off delay due to reading of comments
+N130 G603		   ;interpolate the end of the line
+N140 M55			;home mirror
+N150 G4F4		   ;necessary delay for positioning of the mirror				
+N160 M0			 ;stop program until next input
+
+;R-Parameters-----------------------
+
+N170 R0=4106               ;LASER POWER
+N180 R50=250        	  ;Feed Rate
+N190 R40=5               ;CLAD WIDTH
+N200 R41=0.05              ;OVERLAPING
+N210 R1=20	 			;X-axis
+N220 R2=20	 			;Y-axis
+N230 R8=(R40*(1-R41))     ;Space BETWEEN lines
+N240 R3=TRUNC(R1/R8)	  ;Number of lines (real number)
+N290 R11=0
+
+;Process Start-up------------------------------------------
+N340 M56		   ;set canal 1 as laser-source 
+N350 G4F4		   ;necessary delay for positioning of the mirror
+;CROSSJET-POWDER!!!!!!!!!!!!!!!!
+N360 M0			  ;wait for user-input
+
+
+;Laser On and Path-------
+
+N370 H=R0
+
+
+N450    WHILE(R11<R3)		  ;BLOBK LOOP
+N460        ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power
+N470         G1 Y=-R2 F=R50            ;FIRST LINE
+N480         ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off
+N490         G1 Y=R2 X=-(R8) F=2000	  ;Return command
+N500         R11=R11+1	          ;Increment variables
+N510    ENDWHILE
+N520    ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power			  
+N530    G1 Y=-R2 F=R50            ;LAST LINE
+N540    ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off          
+N750    G1 X=R8*R3 Y=-12 F=2000
+
+
+N170 R0=3583               ;LASER POWER
+N180 R50=250        	  ;Feed Rate
+N190 R40=3.8               ;CLAD WIDTH
+N200 R41=0.05              ;OVERLAPING
+N210 R1=20	 			;X-axis
+N220 R2=20	 			;Y-axis
+N230 R8=(R40*(1-R41))     ;Space BETWEEN lines
+N240 R3=TRUNC(R1/R8)	  ;Number of lines (real number)
+N290 R11=0
+N790 
+N370 H=R0
+N450    WHILE(R11<R3)		  ;BLOBK LOOP
+N460        ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power
+N470         G1 Y=-R2 F=R50            ;FIRST LINE
+N480         ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off
+N490         G1 Y=R2 X=-(R8) F=2000	  ;Return command
+N500         R11=R11+1	          ;Increment variables
+N510    ENDWHILE
+N520    ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power			  
+N530    G1 Y=-R2 F=R50            ;LAST LINE
+N540    ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off          
+N750    G1 X=R8*R3 Y=-12 F=2000
+N800 
+
+N170 R0=3060               ;LASER POWER
+N180 R50=250        	  ;Feed Rate
+N190 R40=2.6               ;CLAD WIDTH
+N200 R41=0.05              ;OVERLAPING
+N210 R1=20	 			;X-axis
+N220 R2=20	 			;Y-axis
+N230 R8=(R40*(1-R41))     ;Space BETWEEN lines
+N240 R3=TRUNC(R1/R8)	  ;Number of lines (real number)
+N290 R11=0
+
+N370 H=R0
+N450    WHILE(R11<R3)		  ;BLOBK LOOP
+N460        ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power
+N470         G1 Y=-R2 F=R50            ;FIRST LINE
+N480         ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off
+N490         G1 Y=R2 X=-(R8) F=2000	  ;Return command
+N500         R11=R11+1	          ;Increment variables
+N510    ENDWHILE
+N520    ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power			  
+N530    G1 Y=-R2 F=R50            ;LAST LINE
+N540    ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off          
+N750    G1 X=R8*R3 Y=-12 F=2000
+
+N810 
+N170 R0=2450              ;LASER POWER
+N180 R50=250        	  ;Feed Rate
+N190 R40=2.6               ;CLAD WIDTH
+N200 R41=0.05              ;OVERLAPING
+N210 R1=20	 			;X-axis
+N220 R2=20	 			;Y-axis
+N230 R8=(R40*(1-R41))     ;Space BETWEEN lines
+N240 R3=TRUNC(R1/R8)	  ;Number of lines (real number)
+N290 R11=0
+N790 
+N370 H=R0
+N450    WHILE(R11<R3)		  ;BLOBK LOOP
+N460        ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power
+N470         G1 Y=-R2 F=R50            ;FIRST LINE
+N480         ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off
+N490         G1 Y=R2 X=-(R8) F=2000	  ;Return command
+N500         R11=R11+1	          ;Increment variables
+N510    ENDWHILE
+N520    ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power			  
+N530    G1 Y=-R2 F=R50            ;LAST LINE
+N540    ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off
+;End of Program--------------------------------------------
+N770 M55			;home mirror
+N780 M30			;program end
+
+ 
+
