@@ -1,0 +1,48 @@
+;Author: FRANCISCO R.
+;Exercise 2b 
+;It draws lines R1xR2 square, R8 Space between the lines, R4 number of layers
+
+N100 PROC EXERCISE_2B
+
+;General Configurations-----------------------------------
+N110 G91				;relative positioning
+N120 G64
+N130 M55				;home mirror
+N140 G4F4				;necessary delay for positioning of the mirror
+N150 M0				;wait for user-input
+
+;R-Parameters-----------------------
+
+N160 R1=20				;X-axis
+N170 R2=20				;Y-axis
+N180 R8=2				;Space bettwen lines
+N190 R3=R2/R8			;Number of lines (real number)
+N200 R3=TRUNC(R2/R8)			;Round R3 to a integer, down if < 0.5, up if >0.5
+N210 R4=3				;Number of layers
+N220 R5=1500				;Laser Power
+N230 R6=3000				;speed with laser
+N240 R7=4000            		;speed without laser
+
+N250 R11=0				;Increment Variable
+
+;Laser On and Path------------------
+
+;N260 WHILE(R11<R4)			;Laywer loop
+N270 M50				;Laser on
+N280 G1 X=-R1			;First line
+N290 WHILE(R10<R3)			;Line loop
+N300 M51				;Laser off
+N310 G0 X=R1 Y=-R2/(R3-1)		;Return command
+N320 M50				;Laser on
+N330 G1 X=-R1			;Secondary lines
+N340 R10=R10+1			;Increment variables
+N350 ENDWHILE			;End line loop
+N360 M51				;Laser off
+N370 G0 X=R1 Y=R2			;Laser home position
+N380 R11=R11+1			;Increment variables
+N390 G0 Z=R8				;Laywer height
+N400 R10=1				;Reset line variable
+;N410 ENDWHILE			;End laywer loop
+
+;End of subprogram--------------------
+N420 RET

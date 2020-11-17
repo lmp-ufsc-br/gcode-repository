@@ -1,0 +1,80 @@
+;Author: Luam Gabriel Maul
+;Description: Ampulheta
+;Data: 10/02/2019
+ 
+;General Configurations-----------------------------------
+N100 $AC_TIMER[1]=0    ;Cronometer
+N110 G91	       ;Relative Coordenates
+N120 G71               ;Metric system
+N130 G64	       ;Continuous-path-mode
+N140 M55               ;Move laser to home
+N150 G4F4              ;Delay de 4 segundos
+;N160 M0                ;Wait for command
+
+;R-Parameters---------------------------------------------
+
+N170 R01 = 15    ;Maximum radium
+N180 R02 = 10    ;Minimum radium
+N190 R03 = 35    ;Max angle
+N200 R04 = 0     ;Initial var in cossine
+N210 R05 = 0.5   ;Layer height
+N220 R06 = 0     ;Counter
+;N230 R09 = 100          ;Laser power
+;N240 R10 = 100          ;Powder flow value
+N230 R11 = 1000         ;Laser OFF speed
+N240 R12 = 2000         ;Laser ON speed
+
+N250 R13 = ((R01 - R02)/2)              ;Amplitude
+N260 R14 = ((2 * 3.1415 * R13)/(TAN(R03)))    ;Geometry height as a function of max angle and amplitude
+N270 R15 = ((R13 * COS((2 * 3.1415 * R04)/(R14))) + (R02 + R13))    ;Radium of each layer as a function of amplitude, Z, geometry height and minimum radium
+
+
+;Process Start-up------------------------------------------
+N280 M56        ;Move laser to channel 1
+N290 G4F4      	;Delay de 4 segundos
+;N320 M78	;Shielding Gas ON
+;N300 M0		;Wait for commmand
+
+;Laser On and Path-----------------------------------------
+
+;N330 H1 = R09           ;Laser power
+;N340 H2 = R10           ;Powder flow value
+;N350 M62                ;Powder mixer ON
+;N360 M64                ;Carrier Gas ON
+;N370 M66                ;Powder feed ON
+;N380 G4F5               ;Delay for powder flow stabilization
+N310 ID=1 WHEN $AC_TIMER[1]>=0 DO M88            ;Laser Pointer ON
+
+N320 WHILE((R05 * R06) <= R14)
+N330    G2  X=R15*2    Y=0    Z=R05/2    CR=R15    F =R12    ;Do the first G2
+N340    R04 =R04+(R05/2)    ;Increment R04
+N350    R15 =(R13*COS((2*3.1415*R04)/R14))+(R02+R13)    ;New radius
+N360    G2  X=-R15*2    Y=0   Z=R05/2    CR=R15    ;Do the second G2
+N370    R04=R04 + (R05/2)    ;Increment R04
+N380    R15=(R13*COS((2*3.1415*R04)/R14))+(R02+R13)    ;New radius
+N390    R06=R06+1          ;Increment counter
+N400 ENDWHILE
+
+N410 ID=1 WHEN $AC_TIMER[1]>=0 DO M89                                           ;Laser Pointer OFF
+;N510 M63                                                                       ;Powder mixer OFF
+;N520 M65                                                                       ;Carrier gas OFF
+;N540 M67                                                                       ;Powder feed OFF
+
+N420 G4F5    ;5 seconds delay
+
+N430 ID=1 WHEN $AC_TIMER[1]>=0 DO M88    ;Laser Pointer ON
+
+N440 remelting:
+        N450    G2 X = (R15 * 2)    CR = (R15)    ;Do the first G2
+        N460    G2 X = (-R15 * 2)   CR = (R15)    ;Do the second G2
+N470 REPEAT remelting P = 1
+
+N480 ID=1 WHEN $AC_TIMER[1]>=0 DO M89    ;Laser Pointer OFF
+N490 G4F4    ;4 seconds delay
+;N548 M79    ;Shield gas OFF
+
+;End of Program--------------------------------------------
+
+N500 M55			;Move laser to home
+N510 G4F3			;3 seconds delay
+N520 M30			;End of program

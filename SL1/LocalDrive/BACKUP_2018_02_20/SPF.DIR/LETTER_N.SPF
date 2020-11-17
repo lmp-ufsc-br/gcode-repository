@@ -1,0 +1,24 @@
+;Author: Denise Albertazzi Gonçalves
+;Letter N
+;Laser power (RO), letter height(R1), letter width (R2), spacing within letters (R3), speed with laser (R4), speed without laser (R5)
+	
+N100 PROC LETTER_N
+
+;General Configurations--------------------------
+N110 G71			; Metric system units (just length)
+N120 G91			; Relative coordinates
+N130 G641		; Continuous path mode
+N140 G603		; Block change at IPO - end of block -wut?
+
+;Laser On and Pattern----------------------------------
+N150 G0 X=-R1	; moving to beggining of letter
+N160 H=R0		; set laser power
+N170 M50			; turn on laser
+N180 G1 X=R1 F=R4
+N190 G1 X=-R1 Y=-R2
+N200 G1 X=R1
+N210 M51		; Laser off
+N220 G0 Y=-R3	; Moving on to next letter
+
+;End of subprogram---------------------------------
+N230 RET

@@ -1,0 +1,52 @@
+;Author: Adriano Pereira
+;program is used to create a column with multiple rows consisting of 
+;one-layer rectangle-shaped clads with different overlappings
+
+;General Configurations-----------------------------------
+N100 $AC_TIMER[1]=0 
+N110 G91			;relative positioning
+N120 G641			;turn off delay due to reading of comments
+N130 G603			;interpolate the end of the line
+N140 M55			;home mirror
+N150 G4F4			;necessary delay for positioning of the mirror				
+N160 M0				;stop program until next input
+
+;R-Parameters---------------------------------------------
+N170 R0=6488			;laserpower
+N180 R1=27			;width(Y-length) of rectangle
+N190 R2=16			;height(X-length) of rectangle
+N200 R3=0.70			;overlapping percentage
+N210 R5=800			;feedrate X-Y-axis
+N220 R7=2.73			;width of the clad determined by earlier tests
+N230 R8=R3*R7			;spacement within lines
+N240 R4=TRUNC(R2/R8)		;number of lines
+
+;Process Start-up------------------------------------------
+N250 M56			;set canal 1 as laser-source
+N260 G4F4			;necessary delay for positioning of the mirror
+N270 M0
+;START POWDER!!!
+N280 G4F10
+N290 M0
+
+;Laser On and Path-----------------------------------------	
+N300 H=R0
+;N310 CLADS:
+N310    LINE:   				;create rectangle 
+N320	    ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power
+N330	    G1 Y=-(R1) F=R5		          ;move in Y-direction 
+N340	    ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off
+N350	    G1 X=-(R8) Y=R1		          ;move in X- and Y-direction	
+N360    REPEAT LINE P=R4		           ;end loop "LINE"
+	
+;N380 G1 Y=-(R1+6.6) X=(R8*R4) F2000	;move to start of next column
+;N390 REPEAT CLADS P=3
+
+N370 M0
+;TURN OFF POWDER!!!
+N380 M0
+N390 G4F10
+
+;End of Programm--------------------
+N400 M55			;home mirror
+N410 M30			;program end

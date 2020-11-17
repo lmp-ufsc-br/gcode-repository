@@ -1,0 +1,63 @@
+;Author: Stefan Gnaase
+;program is used to create a column with multiple rows consisting of 
+;one-layer surfaces in shape of a rectangle that have different overlapping
+
+;definition of sample parameters
+N0 R0=20					;width(Y-length) of one rectangle
+N1 R2=10					;number of lines per rectangle
+N2 R3=0.5					;overlapping percentage to start from in each column
+N3 R4=0.1					;increment by which overlapping percentage will be decreased
+N4 R5=3000					;feedrate X-Y-axis
+N5 R6=1500					;laserpower
+N6 R7=4					;number of rows
+N7 R9=3.5					;space between samples and contour of sample
+N8 R10=1.38					;width of the clad determined by earlier tests
+N9 R12=12					;distance between startingpoint of rectangles
+N10 R13=0					;variable to keep track of the x-distance
+
+
+;general configurations
+N11 G91						;relative positioning
+N12 G641						;turn off delay due to reading of comments
+N13 G603                        ;INTERPOLATE THE END OF THE LINE
+N14 M55						;home mirror
+N15 G4F4					;necessary delay for positioning of the mirror				
+N16 M0						;stop program until next input
+
+;process-start
+N17 M56						;set canal 1 as laser-source
+N18 G4F4					;necessary delay for positioning of the mirror
+N19 M0
+
+N20 G0 X=-R9 Y=-R9			;go to predefined position
+
+;POWDER START
+;G4F15
+N21 R20=1
+N22 ROW:
+N23	R14 = 0
+N24	R11=R3*R10				;distance between lines
+	;create rectangle-pattern
+N25    LINE:					;start loop "LINE"
+N26        H=R6 M50 				;turn laser on with preset power
+N27		G1 Y=-R0 F=R5		;move in Y-direction 
+N28		M51					;turn laser off
+N29		G1 X=-R3 Y=R0 F=500	;move in X- and Y-direction
+N30		R13 = R13 + R3	
+N31		R14 = R14 + R3
+N32	REPEAT LINE P=R2-1		;end loop "LINE"
+N33	R3=R3+R4
+N34    R20=R20+1				;decrease overlapping
+N35    IF(R20 <= R7)	
+N36        G0 X=(-(R12-R14)+R3)	;move preset distance between rectangles in X-direction
+N37 ENDIF
+N38     IF(R20 <= R7)
+N39        R13 = R13 + (R12-R14)-R3	
+N40    ENDIF
+N41 REPEAT ROW P=R7-1
+N42 G0 Y=-R0	X=(R13+R9)		;move to start of next column
+
+;end of the program
+N43 M55					;home mirror
+N44 M0
+N45 M30					;program end

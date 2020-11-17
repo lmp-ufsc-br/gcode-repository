@@ -1,0 +1,30 @@
+;Author: Fernanda M Jacques
+;Letter Y
+;Laser power (RO), letter height(R1), letter width (R2), spacing within letters (R3), speed with laser (R4), speed without laser (R5)
+
+N100 PROC LETTER_Y
+
+; General Configurations---------------------------------
+N110 G71			; Metric system units (just length)
+N120 G91			;relative positioning
+N130 G641			;
+N140 G603			;
+
+;Laser on and Path----------------------------------------
+;R1=10
+;R2=7
+;R3=2
+;R4=500
+N150 H=R0 
+N160 M50		;LASER ON
+N170 G1 X=-(R1*(1/2)) Y=-(R2*(1/2)) F=R4 ;      
+N180 G1 X=-(R1*(1/2));	
+N190 M51		;LASER OFF   
+N200 G0 X=(R1*(1/2)) ;Retorn to middle	
+N210 M50
+N220 G1 Y=-(R2*(1/2)) X=(R1*(1/2))    
+N230 M51 
+N240 G0 Y=-R3     
+
+;End of subprogramm---------------------------------
+N250 RET

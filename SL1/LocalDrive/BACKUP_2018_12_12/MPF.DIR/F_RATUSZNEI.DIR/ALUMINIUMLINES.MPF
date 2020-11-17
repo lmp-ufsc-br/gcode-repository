@@ -1,0 +1,81 @@
+ 
+;General Configurations-----------------------------------
+N100 $AC_TIMER[1]=0 
+N110 G91			;relative positioning
+N120 G641			;turn off delay due to reading of comments
+N130 G603			;interpolate the end of the line
+N140 M55			;home mirror
+N150 G4F4			;necessary delay for positioning of the mirror				
+N160 M0				;stop program until next input
+
+;R-Parameters-----------------------
+N170 R1=20  ;LENGTH
+N180 R2=15 
+N190 R3=10
+N200 R4=3  ;#ROWS 
+;Process Start-up------------------------------------------
+N210 M56			;set canal 1 as laser-source 
+N220 G4F4			;necessary delay for positioning of the mirror
+;CROSSJET!!!!!!!!!!!!!!!!
+N230 M0				;wait for user-input
+
+;Laser On and Path-------
+;LINE 1 
+N240 H=2000
+N250 ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power
+N260 G1 Y=-R1 F=1000           
+N270 ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off
+N280 G1 Y=R1 X=-R2 F=3000
+ 
+;LINE 2 
+
+N290 H=3000
+N300 ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power
+N310 G1 Y=-R1 F=1000           
+N320 ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off
+N330 G1 Y=R1 X=-R2 F=3000
+
+ 
+;LINE 3 
+
+N340 H=4000
+N350 ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power
+N360 G1 Y=-R1 F=1000           
+N370 ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off
+;N380 G1 Y=R1 X=-R2 F=3000
+ 
+;RAW 2
+ 
+;LINE 1 
+
+N730 H=2000
+N740 G1 Y=-R3 X=((R4-1)*R2)
+N750 ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power
+N760 G1 Y=-20 F=4000           
+N770 ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off
+N780 G1 Y=R1 X=-R2 F=3000
+ 
+;LINE 2 
+
+N790 H=3000
+N800 ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power
+N810 G1 Y=-R1 F=4000           
+N820 ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off
+N830 G1 Y=R1 X=-R2 F=3000
+
+ 
+;LINE 3 
+
+N840 H=4000
+N850 ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power
+N860 G1 Y=-R1 F=4000           
+N870 ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off
+;N880 G1 Y=R1 X=-R2 F=3000
+ 
+  
+;End of Program--------------------------------------------
+N1140 M55			;home mirror
+N1150 M30			;program end
+
+ 
+

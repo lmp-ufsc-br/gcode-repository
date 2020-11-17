@@ -1,0 +1,89 @@
+;Author: Stefan Gnaase
+;program is used to create a table-pattern of lines
+;with different speeds for each row and different laserpower for each column 
+;parameters can be set manually after a column is finished, program will proceed just after a new user-input
+
+;General Configurations-----------------------------------
+G91			;relative positioning
+G641			;turn off delay due to reading of comments
+G603                    ;interpolate the line end
+M55			;home mirror
+G4F4			;necessary delay for positioning of the mirror
+M0			;wait for user-input
+
+;R-Parameters---------------------------------------------
+R0=20		   	;length of the weld
+R1=4			;spacement between lines
+R2=3	  		;number of lines
+R3=4000		       	;initial laser power
+R4=5000			;initial feedrate
+R5=1000			;laser power increment
+R6=1000			;feedrate increment
+R7=45			;pause for cooldown
+R8=5			;Z-focus
+
+;Process Start-up------------------------------------------
+M56			;set canal 1 as laser-source
+G4F4			;necessary delay for positioning of the mirror
+M0			;wait for user-input
+;START LASER!!!
+G4F3
+
+G1 X=+46 F500
+G1 X=-(4) Y=-(3) F500	;go to starting position
+
+
+;Create Pattern-------------------------------------
+;G1 Z=R8 F100			;ponto focal
+
+R9=R4
+G1 X=-4 F500
+WELDLINES1:			;start loop "WELDLINE"
+		H=R3			;set laser power
+	M50 			;turn laser on with predefined power
+	G1 Y=-R0 F=R4   	;weld
+	M51			;turn laser off
+	G1 X=-R1 Y=R0 F500	;move rapidly to next starting position
+	G4 F=R7
+	R9=R9+R5		;decrease feedrate by presetted value
+REPEAT WELDLINES1 P=(1)      	;end loop "WELDLINE"
+G1 X=-2 F500
+
+ROW1:
+R9=R4
+R3=R3+R5
+WELDLINES2:			;start loop "WELDLINE"
+	H=R3			;set laser power
+	M50 			;turn laser on with predefined power
+	G1 Y=-R0 F=R9   	;weld
+	M51			;turn laser off
+	G1 X=-R1 Y=R0 F500	;move rapidly to next starting position
+	G4 F=R7
+	R9=R9+R5		;decrease feedrate by presetted value
+REPEAT WELDLINES2 P=(R2-1)      ;end loop "WELDLINE"
+G1 X=-2 F500
+REPEAT ROW1: P=(1)	      	;end loop "WELDLINE"
+
+G1 X=+((R1*10)+4) Y=-5 F500
+
+ROW2:
+G1 X=-2 F500
+R9=R4
+R3=R3+R5
+WELDLINES2:			;start loop "WELDLINE"
+	H=R3			;set laser power
+	M50 			;turn laser on with predefined power
+	G1 Y=-R0 F=R9   	;weld
+	M51			;turn laser off
+	G1 X=-R1 Y=R0 F500	;move rapidly to next starting position
+	G4 F=R7
+	R9=R9+R5		;decrease feedrate by presetted value
+REPEAT WELDLINES2 P=(R2-1)      ;end loop "WELDLINE"
+REPEAT ROW2: P=(1)	      	;end loop "WELDLINE"
+
+
+;G1 X=+(R1*R2) Y=-0 F500
+	
+;End of Program--------------------------------------------
+M55					;home mirror
+M30					;program end

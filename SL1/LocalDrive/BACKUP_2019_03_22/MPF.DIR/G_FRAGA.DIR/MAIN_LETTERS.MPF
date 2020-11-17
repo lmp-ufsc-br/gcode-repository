@@ -1,0 +1,36 @@
+;Author: Gabriel Fraga
+;It writes the number 5, 6 and the symbol * previously defined as subprograms
+
+;General Configurations-------------------------------------------------------------------
+N100 G91                    ; relative coordinates
+N110 G64                    ; continuous-path-mode
+N120 M55                    ; move laser mirror to home
+N130 G4F4                   ; 4 seconds delay for positioning the mirrors
+N140 M0                     ; wait for comand
+
+;R Parameters-----------------------------------------------------------------------------
+N150 R0=1500                ; laser power in watts
+N160 R1=100                 ; letter's height (X-axis) mm
+N170 R2=50                  ; letter's width  (Y-axis) mm             
+N180 R3=5                   ; space between letters    mm
+N190 R4=3000                ; speed with laser ON      mm/min
+N200 R5=4000                ; speed with laser OFF     mm/min
+N210 R6=3                   ; number of letters 
+
+;Process Start-up---------------------------------------------------------------------------
+N220 M56                                  ; move laser mirror to Channel 1 
+N230 G4F4                                 ; 4 seconds delay for positioning the mirrors 
+;CROSSJET!!!!!!                           ;
+N240 M0                                   ; wait for comand
+
+;Laser On and path
+N250 H=R0                                 ; set laser power
+N260 LETTER_5                             ; call subprogram for number 5
+N270 G0 Y=-(R2+R3)                        ; start point for next letter
+N280 LETTER_6                             ; call subprogram for number 6
+N290 G0 X=-R1 Y=-R3                   ; start point for next letter
+N280 LETTER_AST                           ; call subprogram for symbol asterisk
+
+;End of program--------------------------------------------------------------------------
+N300 M55                                  ; home mirror
+N210 M30                                  ; program end

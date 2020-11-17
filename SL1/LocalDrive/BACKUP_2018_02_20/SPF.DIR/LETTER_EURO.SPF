@@ -1,0 +1,54 @@
+;Author: Rafael Petters da Cunha
+;Letter EURO
+;Laser power (RO), letter height(R1), letter width (R2), spacing within letters (R3), speed with laser (R4), speed without laser (R5)
+
+N100 PROC LETTER_EURO
+
+; General Configurations---------------------------------
+N110 G71			; Metric system units (just length)
+N120 G91			;relative positioning
+N130 G641			;
+N140 G603			;
+
+;Laser On and Path-----------------------------------
+N150 H=R0						;laser Power
+
+N160 IF (R2>=(5*(R1/8)))
+
+N170 G0 	X=-((4/10)*R1)  Y=-(R2-(R1/8)) 		;going to right side of superior line
+N180 M50 						;turn on laser beam
+N190 G1 	Y=(R2-(R1/8))  F=R4 			;superior straight line
+N200 M51 						;turn off laser beam
+N210 G0 	X=-((2/10)*R1) 				;going to inferior line
+N220 M50 						;turn on laser beam
+N230 G1 	Y=-(R2-(R1/8))  F=R4			;inferior straight line
+N240 M51 						;turn off laser beam
+N250 G0 	X=-((4/10)*R1)  Y=-(R1/8) 		;going to right and inferior part of the "C"
+N260 M50 						;turn on laser beam
+N270 G1 	Y=(R2-(5*R1/8))  F=R4 			;inferior straight part of the "C"
+N280 G2 	X=R1  I=(R1/2)   F=R4 			;rounded part of the "C"
+N290 G1 	Y=-(R2-(5*R1/8))  F=R4 			;superior straight part of the "C"
+
+N300 ELSE
+
+N310 G0 	X=-((4/10)*R1)  Y=-(4*(R2/5))			;going to right side of superior line
+N320 M50 							;turn on laser beam
+N330 G1 	Y=(4*(R2/5))  F=R4 				;superior straight line
+N340 M51 							;turn off laser beam
+N350 G0 	X=-((2/10)*R1) 					;going to inferior line
+N360 M50 							;turn on laser beam
+N370 G1 	Y=-(4*(R2/5))  F=R4				;inferior straight line
+N380 M51 							;turn off laser beam
+N390 G0 	X=-((4/10)*R1)  Y=-(R2/5) 			;going to right and inferior part of the "C"
+N400 M50 							;turn on laser beam
+N410 G2 	X=(4*(R2/5))  Y=(4*(R2/5))  I=(4*(R2/5)) F=R4 	;rounded inferior part of the "C"
+N420 G1	X=(R1-(8*R2/5))  F=R4 				;atraight part inside the "C"
+N430 G2 	X=(4*(R2/5))  Y=-(4*(R2/5))  J=-(4*(R2/5)) F=R4 ;rounded superior part of the "C" 
+N440 M51
+
+N450 ENDIF
+
+N460 G0 	Y=-R3
+				
+;End of Subprogramm--------------------
+N470 RET	

@@ -1,0 +1,30 @@
+;Author: Maria Helena Zacaron
+;Letter 3
+;Laser power (RO), letter height(R1), letter width (R2), spacing within letters (R3), speed with laser (R4), speed without laser (R5)
+
+N100 PROC LETTER_3
+
+; General Configurations---------------------------------
+N110 G71                     ; Metric system units (just length)
+N120 G91                     ; Relative positioning
+N130 G641                    ;
+N140 G603                    ;
+
+;Laser On and Path-----------------------------------
+N150 G1 x=-(R1*(1/4))                             F=R5 ;POSITIONING
+N160 M50                                               ;LASER ON
+N170 G2 x=(R1*(1/4))  y=-(R1*(1/4)) J=-(R1*(1/4)) F=R4 ;1/4 CIRCLE CLOCKWISE
+N180 G1 Y=-(R2-(R1*(1/3)))                        F=R4 ; -
+N190 G2 X=-((1/2)*R1)               I=(-(1/4)*R1)      ;1/2 CIRCLE CLOCKWISE
+N200 G1 Y=((1/8)*R1)                                   ;-
+N210 M51                                               ;LASER OFF
+N220 G1 Y=-((1/8)*R1)                             F=R5 ;
+N230 M50                                               ;LASER ON
+N240 G2 X=-((1/2)*R1)               I=-((1/4)*R1) F=R4 ;1/2 CIRCLE CLOCKWISE
+N250 G1 Y=(R2-(R1*(1/3)))                              ; -
+N260 G2 x=(R1*(1/4))  y=(R1*(1/4))  I=(R1*(1/4)) F=R4  ;1/4 CIRCLE CLOCKWISE
+N270 M51                                               ;LASER OFF
+N280 G1 X=(R1*(3/4)) Y=-(R3+R2)                                     ;SPACE
+
+;End of subprogramm---------------------------------
+N290 RET

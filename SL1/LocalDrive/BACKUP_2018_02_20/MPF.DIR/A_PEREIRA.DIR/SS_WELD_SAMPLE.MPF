@@ -1,0 +1,46 @@
+;Author: Adriano Pereira
+;program is used to create a table-pattern of lines
+;with different speeds for each row and different laserpower for each column 
+;parameters can be set manually after a column is finished, program will proceed just after a new user-input
+
+;General Configurations-----------------------------------
+N100 G91			;relative positioning
+N110 G641			;turn off delay due to reading of comments
+N120 G603                    ;interpolate the line end
+N130 M55			;home mirror
+N140 G4F4			;necessary delay for positioning of the mirror
+N150 M0			;wait for user-input
+
+;R-Parameters---------------------------------------------
+N160 R0=76.2		   	;length (Y-axis) of the Square 
+N170 R1=34.8			;Hight (X-axis)of the Square
+N180 R3=4000		       	;laser power
+N190 R4=5000			;feedrate
+N200 R5=3			;pause for cooldown
+N210 R6=10               ;Z-FOCUS
+
+;Process Start-up------------------------------------------
+N220 M56		;set canal 1 as laser-source
+N230 G4F4		;necessary delay for positioning of the mirror
+N240 M0		;wait for user-input
+;CROSSJET!!!
+N250 G4F3
+ 
+;N260 G1 X=+(1)  Y=-(1) F500	;go to starting position
+N270 G1 Z=R6 F100
+N280 M0
+
+
+;Create Pattern-------------------------------------
+N290 H=R3			;set laser power
+N300 M50 			;turn laser on 
+N310 G1 X=-(R1-1.6) Y=-(0) F=R4   	;weld
+N320 G1 Y=+(R0-0.2) X=-(0.1) F=R4   	;weld
+N330 G1 X=+(R1-1.2) Y=-(0.1) F=R4   	;weld
+N340 G1 Y=-(R0-0.3) X=-0.3 F=R4   	;weld
+N350 M51     			;turn laser off
+N360 G4 F=R5
+	
+;End of Program--------------------------------------------
+N370 M55					;home mirror
+N380 M30					;program end

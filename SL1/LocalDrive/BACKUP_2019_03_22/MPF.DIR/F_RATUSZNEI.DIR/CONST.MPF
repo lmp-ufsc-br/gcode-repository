@@ -1,0 +1,145 @@
+;Author:Francisco Ratusznei
+;Used for constrained strategy. It prints two sets of weld beads
+;It is possible to change the power for the second set of beads
+;To do that, uncoment H0 into the sub program and set the power on R6 
+ 
+;General Configurations-----------------------------------
+N100 $AC_TIMER[1]=0 
+N110 G91		   ;relative positioning
+N120 G641		   ;turn off delay due to reading of comments
+N130 G603		   ;interpolate the end of the line
+N140 M55		   ;home mirror
+N150 G4F4		   ;necessary delay for positioning of the mirror				
+N160 M0			   ;stop program until next input
+
+;R-Parameters-----------------------
+N170 R1=15		        ;X-axis
+N180 R2=20		        ;Y-axis
+N190 R5=4                 ;DISTANCE BETWEEN SUQARES
+N200 R8=3                 ;DISTANCE BETWEEN LINES
+N210 R3=TRUNC(R1/R8)	  ;NUMBER OF LINES (REAL NUMBER)
+N220 R11=0                ;INCRECREMENT VARIABLE
+
+;Process Start-up------------------------------------------
+N230 M56		   ;set canal 1 as laser-source 
+N240 G4F4		   ;necessary delay for positioning of the mirror
+;CROSSJET-POWDER!!!!!!!!!!!!!!!!
+N250 M0			  ;wait for user-input
+
+;Laser On and Path-------
+
+N260; ---------------------;BLOCK 1
+N270 R0=4006              ;LASER POWER FOR BEAD 1
+N280 R6=2765                ;LASER POWER FOR BEAD 2(UNCOMENT SUB PROGRAM)
+N290 R50=300             ;Feed Rate
+N300 R8=4.32                ;DISTANCE BETWEEN LINES
+N310 R3=TRUNC(R1/R8)	  ;NUMBER OF LINES (REAL NUMBER)
+N320 CONST_SUB	        ;CALLS THE SUB PROGRAM 
+;N330 G1 Y=-R5 F=2000      ;DISTANCE BETWEEN BLOCKS
+
+
+N330; ---------------------;BLOCK 2
+N340 R0=2765              ;LASER POWER FOR BEAD 1
+N350 R6=1524                ;LASER POWER FOR BEAD 2(UNCOMENT SUB PROGRAM)
+N360 R50=800             ;Feed Rate
+N370 R8=1.44                ;DISTANCE BETWEEN LINES
+N380 R3=TRUNC(R1/R8)	  ;NUMBER OF LINES (REAL NUMBER)
+N390 CONST_SUB	        ;CALLS THE SUB PROGRAM 
+;N330 G1 Y=-R5 F=2000      ;DISTANCE BETWEEN BLOCKS
+
+
+N400; ---------------------;BLOCK 3
+N410 R0=4006              ;LASER POWER FOR BEAD 1
+N420 R6=2765                ;LASER POWER FOR BEAD 2(UNCOMENT SUB PROGRAM)
+N430 R50=800             ;Feed Rate
+N440 R8=3.39                ;DISTANCE BETWEEN LINES
+N450 R3=TRUNC(R1/R8)	  ;NUMBER OF LINES (REAL NUMBER)
+N460 CONST_SUB	        ;CALLS THE SUB PROGRAM 
+;N330 G1 Y=-R5 F=2000      ;DISTANCE BETWEEN BLOCKS
+
+
+N470; ---------------------;BLOCK 4
+N480 R0=4006              ;LASER POWER FOR BEAD 1
+N490 R6=2765                ;LASER POWER FOR BEAD 2(UNCOMENT SUB PROGRAM)
+N500 R50=1300             ;Feed Rate
+N510 R8=2.92                ;DISTANCE BETWEEN LINES
+N520 R3=TRUNC(R1/R8)	  ;NUMBER OF LINES (REAL NUMBER)
+N530 CONST_SUB	        ;CALLS THE SUB PROGRAM 
+;N330 G1 Y=-R5 F=2000      ;DISTANCE BETWEEN BLOCKS
+
+
+N540; ---------------------;BLOCK 5
+N550 R0=5247              ;LASER POWER FOR BEAD 1
+N560 R6=4006                ;LASER POWER FOR BEAD 2(UNCOMENT SUB PROGRAM)
+N570 R50=1300             ;Feed Rate
+N580 R8=3.33                ;DISTANCE BETWEEN LINES
+N590 R3=TRUNC(R1/R8)	  ;NUMBER OF LINES (REAL NUMBER)
+N600 CONST_SUB	        ;CALLS THE SUB PROGRAM 
+N610 G1 Y=(R5*5+R2*5) X=-(5+R2) F=2000      ;DISTANCE BETWEEN BLOCKS
+
+
+N620; ---------------------;BLOCK 6
+N630 R0=4006              ;LASER POWER FOR BEAD 1
+N640 R6=5247                ;LASER POWER FOR BEAD 2(UNCOMENT SUB PROGRAM)
+N650 R50=300             ;Feed Rate
+N660 R8=4.32                ;DISTANCE BETWEEN LINES
+N670 R3=TRUNC(R1/R8)	  ;NUMBER OF LINES (REAL NUMBER)
+N680 CONST_SUB	        ;CALLS THE SUB PROGRAM 
+;N330 G1 Y=-R5 F=2000      ;DISTANCE BETWEEN BLOCKS
+
+
+N690; ---------------------;BLOCK 7
+N700 R0=2765              ;LASER POWER FOR BEAD 1
+N710 R6=4006                ;LASER POWER FOR BEAD 2(UNCOMENT SUB PROGRAM)
+N720 R50=800             ;Feed Rate
+N730 R8=1.44                ;DISTANCE BETWEEN LINES
+N740 R3=TRUNC(R1/R8)	  ;NUMBER OF LINES (REAL NUMBER)
+N750 CONST_SUB	        ;CALLS THE SUB PROGRAM 
+;N330 G1 Y=-R5 F=2000      ;DISTANCE BETWEEN BLOCKS
+
+
+N760; ---------------------;BLOCK 8
+N770 R0=4006              ;LASER POWER FOR BEAD 1
+N780 R6=5247                ;LASER POWER FOR BEAD 2(UNCOMENT SUB PROGRAM)
+N790 R50=800             ;Feed Rate
+N800 R8=3.39                ;DISTANCE BETWEEN LINES
+N810 R3=TRUNC(R1/R8)	  ;NUMBER OF LINES (REAL NUMBER)
+N820 CONST_SUB	        ;CALLS THE SUB PROGRAM 
+;N330 G1 Y=-R5 F=2000      ;DISTANCE BETWEEN BLOCKS
+
+
+N830; ---------------------;BLOCK 9
+N840 R0=4006              ;LASER POWER FOR BEAD 1
+N850 R6=5247                ;LASER POWER FOR BEAD 2(UNCOMENT SUB PROGRAM)
+N860 R50=1300             ;Feed Rate
+N870 R8=2.92                ;DISTANCE BETWEEN LINES
+N880 R3=TRUNC(R1/R8)	  ;NUMBER OF LINES (REAL NUMBER)
+N890 CONST_SUB	        ;CALLS THE SUB PROGRAM 
+;N330 G1 Y=-R5 F=2000      ;DISTANCE BETWEEN BLOCKS
+
+
+N900; ---------------------;BLOCK 10
+N910 R0=5247              ;LASER POWER FOR BEAD 1
+N920 R6=6488                ;LASER POWER FOR BEAD 2(UNCOMENT SUB PROGRAM)
+N930 R50=1300             ;Feed Rate
+N940 R8=3.33                ;DISTANCE BETWEEN LINES
+N950 R3=TRUNC(R1/R8)	  ;NUMBER OF LINES (REAL NUMBER)
+N960 CONST_SUB	        ;CALLS THE SUB PROGRAM 
+;N330 G1 Y=-R5 F=2000      ;DISTANCE BETWEEN BLOCKS
+
+N970 G1 X=(7+R1) Y=-5 F=2000
+N980 H=3474 
+N990 G1 Y=-20 F1000
+N1000 G1 X=-5 Y=20
+N1010 H=3474 
+N1020 G1 Y=-20 F650
+N1030 G1 X=-5 Y=20
+N1040 H=3474 
+N1050 G1 Y=-20 F300
+;N1060 G1 X=-7 Y=20 
+;End of Program--------------------------------------------
+N1070 M55			;home mirror
+N1080 M30			;program end
+
+ 
+

@@ -1,0 +1,58 @@
+;Author: Francisco Ratusznei.
+
+;It draws a 3 squares R1 X R2 by N layers
+
+N100 PROC SQUARE_LAYER
+
+;General Config.--------------------
+N110 G71			; Metric system units (just length)
+N120 G91			; Relative coordinates
+
+;Laser On and Path------------------
+
+N130 R13=0
+N140 R10=0
+N150 R15=0
+N160 IF (R4==1)			;Loop for one layer
+N170 WHILE(R10<R3)			
+N180 ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power
+N190 G1 Y=-R2 F=R50            	;First line
+N200 ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off
+N210 G1 Y=R2 X=-(R8) F=1000		;Return command
+N220 R10=R10+1			;Increment variables
+N230 ENDWHILE
+N240 ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power			  
+N250 G1 Y=-R2 F=R50            	 ;Last line
+N260 ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off
+;End square Loop
+;N270 G1 X=(R3*R8) Y=-7 F=1000
+
+N280 ELSE				;Loop for N layers
+N290 WHILE(R4>R15)
+N300 R10=0
+N310 WHILE(R10<R3)			
+N320 ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power
+N330 G1 Y=-R2 F=R50            	;First line
+N340 ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off
+N350 G1 Y=R2 X=-(R8) F=1000		;Return command
+N360 R10=R10+1			;Increment variables
+N370 ENDWHILE			    
+N380 ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power
+N390 G1 Y=-R2 F=R50            	 ;Last line
+N400 ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off
+;End square Loop
+N410 R13=R13+1			;Increment variable
+N420 IF (R13<R4)			;Last layer condition
+;N430 G1 Z=R14 F=1000
+N440 G1 X=(R3*R8) Y=R2 F=1000        ;Return start square
+N450 ENDIF
+N460 R15=R15+1			;increment variable
+N470 ENDWHILE        
+
+N480 ENDIF
+N490 G1 X=R1 Y=-7 F=1000 		;Space Between squares
+;N500 G1 Z=-((R13-1)*R14) F1000	;Send the laser head down
+N510 M30
+
+;End of subprogram--------------------
+N520 RET

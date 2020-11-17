@@ -1,0 +1,47 @@
+;Author: Stefan Gnaase
+;program is used to create a table-pattern of lines
+;with different speeds for each row and different laserpower for each column 
+;parameters can be set manually after a column is finished, program will proceed just after a new user-input
+
+;General Configurations-----------------------------------
+N100 G91			;relative positioning
+N110 G641			;turn off delay due to reading of comments
+N120 G603                    ;interpolate the line end
+N130 M55			;home mirror
+N140 G4F4			;necessary delay for positioning of the mirror
+N150 M0			;wait for user-input
+
+;R-Parameters---------------------------------------------
+N160 R0=48		   	;length of the weld
+N170 R1=4			;spacement between lines
+N180 R2=3	  		;number of lines
+N190 R3=7000      	;laser power
+N200 R4=11000			;initial feedrate
+N210 R5=1000			;feedrate increment
+N220 R6=5			;pause for cooldown
+
+;Process Start-up------------------------------------------
+N230 M56			;set canal 1 as laser-source
+N240 G4F4			;necessary delay for positioning of the mirror
+N250 M0			;wait for user-input
+;CROSJET!!!
+
+N260 G1 X=-(3) Y=-(0) F500	;go to starting position
+N270 M0
+
+;Create Pattern-------------------------------------
+N280 WELDLINE:			;start loop "WELDLINE"
+N290	H=R3			;set laser power
+N300	M50 			;turn laser on with predefined power
+N310	G1 Y=-R0 F=R4   	;weld
+N320	M51			;turn laser off
+N330	G1 X=-R1 Y=R0 F500	;move rapidly to next starting position
+N340	G4 F=R6
+N350	R4 = R4 + R5		;decrease feedrate by presetted value
+N360 REPEAT WELDLINE P=(R2-1)      	;end loop "WELDLINE"
+
+;G1 X=+(42) Y=-(R0+5) F500
+	
+;End of Program--------------------------------------------
+N370 M55					;home mirror
+N380 M30					;program end

@@ -1,0 +1,51 @@
+;Author:Max Baranenko Rodrigues
+;Description:
+ 
+;General Configurations-----------------------------------
+
+N100 $AC_TIMER[1]=0 
+N110 G91			; Posição relativa
+N120 G64
+N130 M55			; Home 
+N140 G4F4		        ; Delay para posicionamento ótico	
+N150 M0			        ; Parada
+
+;R-Parameters-----------------------
+N160 R0=72         ; LASER POWER
+N170 R50=1500       	  ; Feed Rate
+N180 R51=3000        	 ; Feed Rate LASER OFF
+N190 R1=50	 	       ; Comprimento X-axis
+              
+;Process Start-up------------------------------------------
+
+N200 M56		   ;Setar canal 1 
+N210 G4F4		   ; Delay para posicionamento ótico
+N220 M76             ; Crossjet
+N230 M0			   ; Parada
+
+;LASER ON AND PATH--------------------------------------------
+
+;Camada 1 (linha horizontal)
+N240 H1=R0
+;N250 M72                                 ; Disparo fonte IMC
+N260 G4F1                                ; Espera 2 segundos após disparo
+N260 	ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset
+N261 M78
+N270 	G1 X=R1         F=R50  
+;N280 M73
+N350 M79
+N300    ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off
+N310 G4F5                                ; Espera 2 segundos após desligar o arco 
+;N320 	G1 X=-R1 F=R50
+
+
+;End of Program--------------------------------------------
+N320 M77                  ;CROSSJET OFF
+N330 M55	          ;HOME ótica
+N340 M30		  ;FIM DE PROGRAMA
+
+ 
+
+ 
+
+
