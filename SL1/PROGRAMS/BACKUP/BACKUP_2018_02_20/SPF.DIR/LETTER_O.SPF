@@ -1,0 +1,49 @@
+;Author: Denise Albertazzi Gonçalves
+;Letter O
+;Laser power (RO), letter height(R1), letter width (R2), spacing within letters (R3), speed with laser (R4), speed without laser (R5)
+	
+N100 PROC LETTER_O
+
+;General Configurations--------------------------
+N110 G71			; Metric system units (just length)
+N120 G91			; Relative coordinates
+N130 G641		; Continuous path mode
+N140 G603		; Block change at IPO - end of block -wut?
+
+;Laser On and Pattern----------------------------------
+N150 IF(R1>=R2) 	; if the letter is higher than wider
+N160 G0 Y=-(2/5)*R2
+N170 ELSE			; if the letter is wider than higher
+N180 G0 Y=-(2/5)*R1
+N190 ENDIF
+N200 H=R0		; set laser power
+N210 M50			; turn on laser
+N220 IF(R1>=R2)		; if the letter is higher than wider
+N230 G1 Y=-(1/5)*R2 F=R4
+N240 G2 X=-(2/5)*R2 Y=-(2/5)*R2 AR=90
+N250 G1 X=-(R1-(4/5)*R2)
+N260 G2 X=-(2/5)*R2 Y=(2/5)*R2 AR=90
+N270 G1 Y=(1/5)*R2
+N280 G2 X=(2/5)*R2 Y=(2/5)*R2 AR=90
+N290 G1 X=(R1-(4/5)*R2)
+N300 G2 X=(2/5)*R2 Y=-(2/5)*R2 AR=90
+N310 ELSE			; if the letter is wider than higher
+N320 G1 Y=-(R2-(4/5)*R1) F=R4
+N330 G2 X=-(2/5)*R1 Y=-(2/5)*R1 AR=90
+N340 G1 X=-(1/5)*R1
+N350 G2 X=-(2/5)*R1 Y=(2/5)*R1 AR=90
+N360 G1 Y=R2-(4/5)*R1
+N370 G2 X=(2/5)*R1 Y=(2/5)*R1 AR=90
+N380 G1 X=(1/5)*R1
+N390 G2 X=(2/5)*R1 Y=-(2/5)*R1 AR=90
+N400 ENDIF
+N410 M51 ; Laser off
+N420 IF(R1>=R2)		; if the letter is higher than wider
+N430 G0 Y=-(3/5)*R2
+N440 ELSE			; if the letter is wider than higher
+N450 G0 Y=-(R2-(2/5)*R1)
+N460 ENDIF
+N470 G0 Y=-R3 ; Moving on to next letter
+
+;End of subprogram---------------------------------
+N480 RET

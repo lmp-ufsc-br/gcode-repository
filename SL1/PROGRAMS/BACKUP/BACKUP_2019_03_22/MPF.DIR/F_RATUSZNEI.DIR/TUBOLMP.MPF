@@ -1,0 +1,65 @@
+N100 $AC_TIMER[1]=0 
+;Author: Adriano Pereira
+;This program creates 48 linear beads arranged in colummns and rowss accordinly
+;to the lab's standart laser cladding sample.
+
+;General Configurations-----------------------------------
+N110 G91			;relative positioning
+N120 G641			;turn off delay due to reading of comments
+N130 G603			;interpolate the end of the line
+N140 M55			;home mirror
+N150 G4F4			;necessary delay for positioning of the mirror				
+N160 M0				;stop program until next input
+
+;R-Parameters---------------------------------------------
+N170 R0=60.00	;Inital Laser Power
+N180 R2=1000 	;Initial Speed
+N190 R4=1000	;Travel Speed
+N200 R6=45	;A
+N550 R7=25    ;U
+N700 R3=1000
+N710 R8=10
+
+;Process Start-up------------------------------------------
+N210 M56		;set canal 1 as laser-source
+N220 G4F4		;necessary delay for positioning of the mirror
+N230 M0			;TÃ_DÃ-DÃ-DÃ...
+
+;Laser On and Path-----------------------------------------	
+
+
+;STARTING POWDER!!!!
+N500 M76 
+	
+N280 M0
+N480 H1=60.00
+N530 M50
+N520 G1 A=-R6 F=R2
+N521 G1 U=R7 F=R2
+N540 M51
+N560 G1 U=R8 F=R3
+N570 M50
+N580 G1 A=R6 F=R2
+N590 G1 U=R7/2 A=-(R6/2) F=R2
+N600 G1 U=R7/2 A=R6/2 F=R2
+N610 G1 A=-R6 F=R2
+N620 M51
+N630 G1 U=R8 F=R3
+N640 M50
+N650 G1 A=R6 F=R2
+N660 G1 U=R7 F=R2
+N670 G1 A=-(R6/2) F=R2
+N680 G1 U=-R7 F=R2
+N681 M51
+N681 G1 A=R6
+
+
+N490 M77
+;End of Programm--------------------
+;N450 G4F5
+N460 M55			;home mirror
+N470 M30			;program end
+
+ 
+
+ 

@@ -1,0 +1,46 @@
+ 
+;Author:Francisco Ratusznei
+;It writes the letters previously defined as subprogram.
+
+N160 R0=1700			;Laser Power
+N170 R1=70			;X-axis
+N180 R2=60			;Y-axis
+N190 R3=15			;space
+N200 R4=1000			;speed with laser
+N210 R5=1000            	;speed without laser
+N220 R6=12			;number of lettes
+ 
+
+;Process Start-up------------------------------------------
+N210 M56		    ;set canal 1 as laser-source 
+N220 G4F4		   ;necessary delay for positioning of the mirror
+N330 M76            ;CROSSJET-POWDER ON!!!!!!!!!!!!!!!! 
+N260 M0	   	  ;wait for user-input
+
+
+
+;Laser On and Path-------
+
+N260 H1=R0			;Laserpower
+N270 LETTER_F
+N270 LETTER_E
+N270 LETTER_L
+N270 LETTER_I
+N270 LETTER_Z
+N270 LETTER_2
+N270 LETTER_O
+N270 LETTER_1
+N270 LETTER_9
+N270 LETTER_L
+N270 LETTER_M
+N270 LETTER_P
+
+G1 Y=15 F=2000
+N370 
+;End of Program--------------------------------------------
+N330 M77            ;CROSSJET-POWDER OFF!!!!!!!!!!!!!!!!
+;N340 M79            ;GAS 1 OFF
+N350 M55			;home mirror
+N360 M30			;program end
+
+ 

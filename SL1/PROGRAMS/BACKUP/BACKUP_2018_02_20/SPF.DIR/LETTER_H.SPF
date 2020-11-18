@@ -1,0 +1,30 @@
+;Author: Alexander
+;Letter H
+;Laser power (RO), letter height(R1), letter width (R2), spacing within letters (R3), speed with laser (R4), speed without laser (R5)
+
+N100 PROC LETTER_H
+
+;General Config.--------------------
+N110 G71			; Metric system units (just length)
+N120 G91			; Relative coordinates
+N130 G641			;
+N140 G603			;
+
+;Laser On and Path------------------
+
+N150 H=R0 M50
+
+N160 G1 X=-R1 F=R4   ;left part of "H"
+N170 M51		;turn laser off
+N180 G0 X=(R1/2)	;move rapidly to next starting position
+N190 M50
+N200 G1 Y=-R2		;middle part of "H"
+N210 M51
+N220 G1 X=-R1/2 
+N230 M50
+N240 G1 X=R1 	;right part of "H"
+N250 M51
+N260 G0 Y=-R3
+
+;End of subprogram--------------------
+N270 RET				

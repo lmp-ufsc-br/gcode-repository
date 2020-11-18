@@ -1,0 +1,30 @@
+;Author: David Hausch
+;Letter R
+;Laser power (RO), letter height(R1), letter width (R2), spacing within letters (R3), speed with laser (R4), speed without laser (R5)
+
+N100 PROC LETTER_R
+
+; General Configurations---------------------------------
+N110 G71			; Metric system units (just length)
+N120 G91			;relative positioning
+N130 G641			;
+N140 G603			;
+
+;Laser On and Path-----------------------------------
+
+N150 G1 X=-R1 F=R5
+N160 M50
+N170 G1 X=R1 F=R4
+N180 IF (R1/4>R2)
+N190 CIP X=-(R1/2) I1=IC(-R1/4) J1=IC(-R2)
+N200 ELSE
+N210 G1 Y=-(R2-R1/4)
+N220 G2 X=-(R1/2) I=-(R1/4) F=R4
+N230 G1 Y=(R2-R1/4) F=R4
+N240 ENDIF
+N250 G1 X=-(R1/2)  Y=-R2
+N260 M51
+N270 G1 X=R1 Y=-R3 F=R5
+
+;END OF SUBPROGRAMM----------------------------------------
+N280 RET

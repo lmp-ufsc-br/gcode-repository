@@ -1,0 +1,46 @@
+N100 $AC_TIMER[1]=0 
+;Author: Adriano Pereira
+;Initial Laser Cladding Tests
+;Version.1
+
+
+;N110 DEF INT TIMEOUT=0
+
+;General Config.--------------------
+N110 G91			;relative positioning
+N120 G641			;turn off delay 1 
+;N140 G603			;turn off delay 2 
+N130 M55			;home mirror
+N140 G4F4			;necessary delay for positioning of the mirror				
+N150 M0			;wait for user-input
+
+;R-Parameters-----------------------
+
+
+;Process Start-up-------------------
+N160 M56			;set canal 1 as laser-source
+N170 G4F4			;necessary delay for positioning of the mirror
+N180 M0			;wait for user-input
+;CROSSJET!!!!!!!!!!!!
+;N300 G4F10
+N190 M0
+
+;Laser On and Path------------------
+N200 R51=1500
+N210 R52=3800
+N220 R53=35
+N230 R54=0
+N240 R55=0.50
+N250 R56=2000
+N260 R57=0.01
+N270 R58=2
+
+N340 H=R51
+N280 M50
+N290 LEISTUNGSRAMPE_XY
+N300 M51
+
+;End of Programm--------------------
+N320 M55				;home mirror
+N330 M30				;program end
+ 

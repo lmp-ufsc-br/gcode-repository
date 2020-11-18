@@ -1,0 +1,62 @@
+;Author: Stefan Gnaase
+;program is used to create a table-pattern of lines
+;with different speeds for each row and different laserpower for each column 
+;parameters can be set manually after a column is finished, program will proceed just after a new user-input
+
+;general configurations
+G91						;relative positioning
+G64						;turn off delay due to reading of comments
+M55						;home mirror
+G4F4					;necessary delay for positioning of the mirror				
+M0						;wait for user-input
+
+;definition of sample parameters
+R0=10					;length of the line to clad
+R2=500					;number by which the feedrate is decreased each iteration
+R3=12					;number of columns
+R4=4					;number of rows
+R5=200					;test sample Y-length
+R6=50					;test sample X-length
+R7=5                  	;distance between lines in Y-direction
+R8=5.5					;distance between lines in X-direction
+R9=2500                 ;laserpower
+R12=4000        		;max speed
+
+G0 X=-R8				;go to starting position
+G0 Y=-R7				;go to starting position
+
+;process-start
+M56						;set canal 1 as laser-source
+G4F4					;necessary delay for positioning of the mirror
+M0						;wait for user-input
+
+;powder start
+G4F20
+
+;create table-pattern
+COL:					;start loop "Column"
+	R1=R12					;set starting feedrate for column
+	ROW:					;start loop "Row"
+		H=R9 M50 			;turn laser on with PREDEFINED POWER
+		G1 Y=-R0 F=R1 		;cladd line
+		M51					;turn laser off
+		G0 X=-R8 Y=R0		;move rapidly to next starting position
+		R1 = R1 - R2		;decrease feedrate by presetted value
+	REPEAT ROW P=R4-1		;end loop "Row"
+	G0 X=R8*R4				;move rapid in X-POSITION FOR NEXT ROW
+	G0 Y=-R7-R0				;move rapid IN Y-POSITION FOR NEXT ROW
+	ROW:					;start loop "Row"
+		H=R9 M50 			;turn laser on with PREDEFINED POWER
+		G1 Y=-R0 F=R1 		;cladd line
+		M51					;turn laser off
+		G0 X=-R8 Y=R0		;move rapidly to next starting position
+		R1 = R1 - R2		;decrease feedrate by presetted value
+	REPEAT ROW P=R4-1		;end loop "Row"
+	G0 X=R8*R4 Y=-R7-R0		;move rapid in next column starting position
+	M0						;wait until user input, so parameters can be set manually
+REPEAT COL P=R3-1		;end loop "Column"
+
+;end of the program
+M55					;home mirror
+M0          		;reminder to turn powder of
+M30					;program end

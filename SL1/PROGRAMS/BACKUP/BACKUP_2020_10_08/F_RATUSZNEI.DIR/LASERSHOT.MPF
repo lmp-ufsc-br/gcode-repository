@@ -1,0 +1,58 @@
+;Author: Adriano Pereira
+;Initial Laser Cladding Tests
+;Version.1
+
+;General Config.--------------------
+N100 G91			;relative positioning
+N110 G641			;turn off delay 1 
+N120 G603			;turn off delay 2 
+N130 M55			;home mirror
+N140 G4F3			;necessary delay for positioning of the mirror				
+N150 M0			;wait for user-input
+
+;R-Parameters-----------------------
+N160 R0=8000			;Laser Power
+N170 R1=0			 ;
+N180 R2=1000			;Initial Speed
+N190 R3=0			;Speed Step
+N200 R4=130			  ;Line Length
+N210 R5=5         	  ;X-Spacement within lines
+N220 R6=5        	   ;Y-Spacement within lines
+N230 R7=4         	  ;X-Spacement from edge
+N240 R8=5         	  ;Y-Spacement from edge 
+N250 R9=2			   ;Number of lines
+N260 R10=3	  		;Number of rows	
+
+;Process Start-up-------------------
+N270 M56			;set canal 1 as laser-source
+N280 G4F3			;necessary delay for positioning of the mirror
+;N290 M0			;wait for user-input
+;START POWDER/CROSSJET/MIG!!!!!
+N290 M0
+
+;Laser On and Path------------------
+
+N300 H=R0 
+;N310 LASER: 
+;N320 G1 Y=-20 F=R2
+
+N320 ID=1 WHEN $AC_TIMER[1]>=0 DO M50
+;N320 G4 F0.5
+;N330 G3 J=(3) F1000
+N330 G1 X=-2.249 Y=-130 F=R2
+;N341 M0
+N340 ID=1 WHEN $AC_TIMER[1]>=0 DO M51
+ 
+;N360 G1 Y=-35 ;(R4+0) F=(R2/2)
+;N320 G4 F0.08
+;N331 G1 Y=-20 F=2500
+;N330 ID=1 WHEN $AC_TIMER[1]>=0 DO M51
+;N331 G1 Y=-5 F=500
+;N340 REPEAT LASER P=50
+;N350 ID=1 WHEN $AC_TIMER[1]>=0 DO M51
+;POWDER/CROSSJET/MIG!!!!!
+;N360 M0
+
+;End of Programm--------------------
+N370 M55				;home mirror
+N380 M30				;program end

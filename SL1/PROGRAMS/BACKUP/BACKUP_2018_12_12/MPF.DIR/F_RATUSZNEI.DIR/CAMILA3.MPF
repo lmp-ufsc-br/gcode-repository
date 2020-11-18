@@ -1,0 +1,162 @@
+;Author:Francisco Ratusznei
+;
+ 
+;General Configurations-----------------------------------
+N100 $AC_TIMER[1]=0 
+N110 G91			;relative positioning
+N120 G641		   ;turn off delay due to reading of comments
+N130 G603		   ;interpolate the end of the line
+N140 M55			;home mirror
+N150 G4F4		   ;necessary delay for positioning of the mirror				
+N160 M0			 ;stop program until next input
+
+;R-Parameters-----------------------
+
+N170 R0=10               ;LASER POWER
+N180 R50=250        	  ;Feed Rate
+N190 R51=3000        	  ;Feed Rate LASER OFF
+N200 R1=80	 			;X-axis
+N210 R2=3	 			;Y-axis
+N220 R3=10	  ;SPACE BTWN lines 
+
+;Process Start-up------------------------------------------
+N230 M56		   ;set canal 1 as laser-source 
+N240 G4F4		   ;necessary delay for positioning of the mirror
+N250 M76                 ;CROSSJET-POWDER!!!!!!!!!!!!!!!!
+N260 M0			  ;wait for user-input
+
+
+;Laser On and Path-------
+
+
+;LINE 1        
+N270 H1=46.00
+N280 R50=2640
+
+N410          ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power
+N380 G1 X=R1 F=R50
+N390         ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off
+N400 G1 X=-R1 Y=-R2 F=R51
+N410          ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power 
+N420 G1 X=R1 F=R50
+N430         ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off
+N440 G1 X=-R1 Y=-R2 F=R51
+
+N450          ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power 
+N460 G1 X=R1 F=R50
+N470         ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off
+
+N480 G1 X=-R1 Y=-R2 F=R51
+
+N490          ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power 
+N500 G1 X=R1 F=R50
+N510         ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off
+
+N520 G1 X=-R1 Y=-R2 F=R51
+N530          ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power 
+N540 G1 X=R1 F=R50
+N550         ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off
+
+N560 G1 X=-R1 Y=-R3 F=R51
+
+
+;LINE 2        
+N270 H1=49.00
+N280 R50=2640
+
+N410          ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power
+N380 G1 X=R1 F=R50
+N390         ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off
+N400 G1 X=-R1 Y=-R2 F=R51
+N410          ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power 
+N420 G1 X=R1 F=R50
+N430         ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off
+N440 G1 X=-R1 Y=-R2 F=R51
+
+N450          ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power 
+N460 G1 X=R1 F=R50
+N470         ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off
+
+N480 G1 X=-R1 Y=-R2 F=R51
+
+N490          ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power 
+N500 G1 X=R1 F=R50
+N510         ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off
+
+N520 G1 X=-R1 Y=-R2 F=R51
+N530          ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power 
+N540 G1 X=R1 F=R50
+N550         ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off
+
+N560 G1 X=-R1 Y=-R3 F=R51
+
+;LINE 3        
+N270 H1=52.00
+N280 R50=2640
+
+N410          ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power
+N380 G1 X=R1 F=R50
+N390         ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off
+N400 G1 X=-R1 Y=-R2 F=R51
+N410          ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power 
+N420 G1 X=R1 F=R50
+N430         ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off
+N440 G1 X=-R1 Y=-R2 F=R51
+
+N450          ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power 
+N460 G1 X=R1 F=R50
+N470         ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off
+
+N480 G1 X=-R1 Y=-R2 F=R51
+
+N490          ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power 
+N500 G1 X=R1 F=R50
+N510         ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off
+
+N520 G1 X=-R1 Y=-R2 F=R51
+N530          ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power 
+N540 G1 X=R1 F=R50
+N550         ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off
+
+N560 G1 X=-R1 Y=-R3 F=R51
+
+;LINE 4        
+N270 H1=54.00
+N280 R50=2640
+
+N410          ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power
+N380 G1 X=R1 F=R50
+N390         ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off
+N400 G1 X=-R1 Y=-R2 F=R51
+N410          ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power 
+N420 G1 X=R1 F=R50
+N430         ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off
+N440 G1 X=-R1 Y=-R2 F=R51
+
+N450          ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power 
+N460 G1 X=R1 F=R50
+N470         ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off
+
+N480 G1 X=-R1 Y=-R2 F=R51
+
+N490          ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power 
+N500 G1 X=R1 F=R50
+N510         ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off
+
+N520 G1 X=-R1 Y=-R2 F=R51
+N530          ID=1 WHEN $AC_TIMER[1]>=0 DO M50 ;turn laser on with preset power 
+N540 G1 X=R1 F=R50
+N550         ID=1 WHEN $AC_TIMER[1]>=0 DO M51 ;turn laser off
+
+N860 G1 X=-R1 Y=(4*4*R2+3*R3) F=R51
+
+;End of Program--------------------------------------------
+N870 M77            ;CROSSJET-POWDER OFF!!!!!!!!!!!!!!!!
+N880 M55			;home mirror
+N890 M30			;program end
+
+ 
+
+ 
+
+

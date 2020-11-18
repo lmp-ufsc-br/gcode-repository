@@ -1,0 +1,67 @@
+;Author: Adriano Pereira
+;program is used to create a column with multiple rows consisting of 
+;one-layer rectangle-shaped clads with different overlappings
+
+
+
+;General Configurations-----------------------------------
+N100 G91			;relative positioning
+N110 G641			;turn off delay due to reading of comments
+N120 G603                    ;interpolate the end of the line
+N130 M55			;home mirror
+N140 G4F4			;necessary delay for positioning of the mirror				
+N150 M0			;stop program until next input
+
+;R-Parameters---------------------------------------------
+N160 R0=25			;width(Y-length) of one rectangle
+N170 R2=10			;number of lines per rectangle
+N180 R3=0.5			;overlapping percentage to start from in each column
+N190 R4=0.05			;increment by which overlapping percentage will be decreased
+N200 R5=3500			;feedrate X-Y-axis
+N210 R6=2000			;laserpower
+N220 R7=3			;number of rows
+N230 R9=3.5			;space between samples and contour of sample
+N240 R10=1.70		;width of the clad determined by earlier tests
+N250 R12=14.5			;distance between startingpoint of rectangles
+
+;Process Start-up------------------------------------------
+N260 M56			;set canal 1 as laser-source
+N270 G4F4			;necessary delay for positioning of the mirror
+N280 M0
+;START POWDER!!!
+N290 G4F10
+
+;N300 G1 X45 F500
+N310 G0 X=-(R9+0) Y=-(R9+0)		;go to starting position
+
+;Laser On and Path-----------------------------------------
+
+N320 R15=0
+N330 ROW:				
+N340    R11=R3*R10		          ;distance between lines     
+N350    R13=0                       ;variable to keep track of the x-distance
+N360    LINE:     		          ;create rectangle
+N370        H=R6 M50        	    ;turn laser on with preset power
+N380	    G1 Y=-(R0) F=R5 	    ;move in Y-direction 
+N390	    M51			         ;turn laser off
+N400	    G1 X=-(R11) Y=R0 F=1500  ;move in X- and Y-direction
+N410	    R13=R13 + R11	
+N420    REPEAT LINE P=R2-1		;end loop "LINE"
+N430	R3=R3+R4
+N440    R15=R15+1		   ;NUMBER OF RECTANGLES DONE
+N450    IF(R15 <= R7)	
+N460        G1 X=-(R12-(R13)) F500	;move preset distance between rect in X
+N470    ENDIF
+N480 REPEAT ROW P=R7-1
+
+N490 G0 Y=-(R0) X=((R12*R7)+R9)		;move to start of next column
+
+N500 M0
+;TURN OFF POWDER!!!
+N510 M0
+N520 G4F10
+
+;End of Programm--------------------
+N530 M55				;home mirror
+N540 M0
+N550 M30				;program end

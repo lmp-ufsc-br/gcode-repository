@@ -1,0 +1,39 @@
+;Author: Alexander
+;program is used to create lines
+ 
+;General Configurations-----------------------------------
+N100 G91			;relative positioning
+N110 G641			;turn off delay due to reading of comments
+N120 G603                    ;interpolate the line end
+N130 M55			;home mirror
+N140 G4F4			;necessary delay for positioning of the mirror
+N150 M0			;wait for user-input
+
+;R-Parameters-----------------------
+N160 R0=5000			;Laser Power
+N170 R1=9			;X-axis
+N180 R2=6			;Y-axis
+N190 R3=6			;space
+N200 R4=4000			;speed
+N380 R5=3 ;NUMBER OF LETTERS
+
+
+;Process Start-up------------------------------------------
+N210 M56			;set canal 1 as laser-source
+N230 G4F4			;necessary delay for positioning of the mirror
+N240 M0
+N250 H=R0			;Laserpower
+
+;LASER ON WRITE-------
+;N260 LETTER_H
+;N270 LETTER_J
+N280 LETTER_X
+N360 LETTER_X
+N370 LETTER_X
+;N290 LETTER_T
+;N300 LETTER_P
+;N310 LETTER_W
+N320 G0 X=-(R1+R3)  Y=((R2*R5)+(R3*R5))
+;End of Program--------------------------------------------
+N330 M55					;home mirror
+N340 M30					;program end

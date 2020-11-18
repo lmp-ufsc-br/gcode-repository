@@ -1,0 +1,144 @@
+N100 $AC_TIMER[1]=0 
+;Author: Adriano Pereira
+;Program designed for parametrization of superpositioned plates. Speed and Lpower are variated.
+
+;General Configurations-----------------------------------
+N110 G91			;relative positioning
+N120 G641			;interpolation
+N130 M55			;home mirror
+N140 G4F4			;necessary delay for positioning of the mirror				
+N150 M0			;stop program until next input
+
+;R-Parameters---------------------------------------------
+N160 R0=4000			;Laser Power
+N170 R1=1000			;Laser Step
+N180 R2=6000			;Speed 
+N190 R3=1000			;Speed Step
+N200 R4=0			;Current LP
+N210 R5=0		 	;Current Speed
+N220 R6=80			;Sample height X
+N230 R7=200			;Sample lenght Y
+N240 R8=7			;point weld X-distance from edge
+N250 R9=7			;point weld Y-distance from edge
+N260 R10=20			;point weld Spacement
+N270 R12=4500		;point weld Laser Power
+N280 R13=0.5			;point weld time
+N290 R14=35			;Weldline Lenght
+N300 R15=15			;X-distance from edge
+N310 R16=15			;Y-distance from edge
+N320 R17=5			;X-spacemet within lines
+N330 R18=5			;Y-spacemet within lines
+N340 R19=12			;number of lines
+N350 R20=3			;number of rows
+
+;Process Start-up------------------------------------------
+N360 M56			;set canal 1 as laser-source
+N370 G4F4			;necessary delay for positioning of the mirror
+N380 M0
+;CROSSJET!!!
+N390 M0
+
+;Laser On and Path-----------------------------------------
+
+N400 H=R12
+
+N410 R21=TRUNC((R6-(R8*2))/R10)
+N420 R22=((R6-(R8*2))/R21)	;corrected X spacement
+N430 R23=TRUNC((R7-(R9*2))/R10)
+N440 R24=((R7-(R9*2))/R23)	;corrected Y spacement	
+
+N450 G1 X=-R8 Y=-R9 F2000
+N460 ID=1 WHEN $AC_TIMER[1]>=0 DO M50
+N470 G4 F=R11
+N480 ID=1 WHEN $AC_TIMER[1]>=0 DO M51
+N490 G1 X=-(R6-(R8*2)) Y=-(R7-(R9*2))
+N500 ID=1 WHEN $AC_TIMER[1]>=0 DO M50
+N510 G4 F=R11
+N520 ID=1 WHEN $AC_TIMER[1]>=0 DO M51
+N530 G1 X=+(R6-(R8*2))
+N540 ID=1 WHEN $AC_TIMER[1]>=0 DO M50
+N550 G4 F=R11
+N560 ID=1 WHEN $AC_TIMER[1]>=0 DO M51
+N570 G1 X=-(R6-(R8*2)) Y=+(R7-(R9*2))
+N580 ID=1 WHEN $AC_TIMER[1]>=0 DO M50
+N590 G4 F=R11
+N600 ID=1 WHEN $AC_TIMER[1]>=0 DO M51
+
+
+N620 R25=R23
+N630 WHILE (R25>1)
+N640	G1 X=+(R22*R21) Y=-(R24)
+N650	ID=1 WHEN $AC_TIMER[1]>=0 DO M50
+N660	G4 F=R11
+N670	ID=1 WHEN $AC_TIMER[1]>=0 DO M51
+N680	G1 X=-(R22*R21) Y=-(R24) 
+N690	ID=1 WHEN $AC_TIMER[1]>=0 DO M50
+N700	G4 F=R11
+N710	ID=1 WHEN $AC_TIMER[1]>=0 DO M51
+N720	R25=R25-2
+N730 ENDWHILE
+
+N740 IF (R25==1)
+N750	G1 Y=-(R24)
+N760 ENDIF
+
+N770 R26=R21
+N780 WHILE (R26>1)
+N790	G1 X=+(R22) Y=+(R24*R23)
+N800	ID=1 WHEN $AC_TIMER[1]>=0 DO M50
+N810	G4 F=R11
+N820	ID=1 WHEN $AC_TIMER[1]>=0 DO M51
+N830	G1 X=+(R22) Y=-(R24*R23) 
+N840	ID=1 WHEN $AC_TIMER[1]>=0 DO M50
+N850	G4 F=R11
+N860	ID=1 WHEN $AC_TIMER[1]>=0 DO M51
+N870	R26=R26-2
+N880 ENDWHILE
+
+N890 IF (R26==1)
+N900	G1 X=-(R22*(R21-1))
+N910 ENDIF	
+
+
+N920 R27=R23
+N930 WHILE (R27>1)
+N940	G1 X=+(R22*R21) Y=+(R24)
+N950	ID=1 WHEN $AC_TIMER[1]>=0 DO M50
+N960	G4 F=R11
+N970	ID=1 WHEN $AC_TIMER[1]>=0 DO M51
+N980	G1 X=-(R22*R21) Y=+(R24) 
+N990	ID=1 WHEN $AC_TIMER[1]>=0 DO M50
+N1000	G4 F=R11
+N1010	ID=1 WHEN $AC_TIMER[1]>=0 DO M51
+N1020	R27=R27-2
+N1030 ENDWHILE
+
+N1040 IF (R27==1)
+N1050	G1 Y=+(R24)
+N1060 ENDIF
+ 
+N1070 R28=R21
+N1080 WHILE (R28>1)
+N1090	G1 X=+(R22) Y=-(R24*R23)
+N1100	ID=1 WHEN $AC_TIMER[1]>=0 DO M50
+N1110	G4 F=R11
+N1120	ID=1 WHEN $AC_TIMER[1]>=0 DO M51
+N1130	G1 X=+(R22) Y=+(R24*R23) 
+N1140	ID=1 WHEN $AC_TIMER[1]>=0 DO M50
+N1150	G4 F=R11
+N1160	ID=1 WHEN $AC_TIMER[1]>=0 DO M51
+N1170	R28=R28-2
+N1180 ENDWHILE
+
+N1190 IF (R28==1)
+N1200	G1 X=+(R24)
+N1210 ENDIF
+
+N1220 M0
+;CROSSJET!!!
+N1230 M0
+
+;End of Programm--------------------
+N1250 M55				;home mirror
+N1270 M30				;program end
+

@@ -1,0 +1,48 @@
+;Author: Adriano Pereira
+;program is used to create a table-pattern of lines
+;with different speeds for each row and different laserpower for each column 
+;parameters can be set manually after a column is finished, program will proceed just after a new user-input
+
+;General Configurations-----------------------------------
+N100 G91					;relative positioning
+N110 G641					;turn off delay due to reading of comments
+N120 G603           				;interpolate the line end
+N130 M55					;home mirror
+N140 G4 F4					;necessary delay for positioning of the mirror
+N150 M0						;wait for user-input
+
+;R-Parameters---------------------------------------------
+N160 R0=10000				;laser power 1
+N170 R1=2000					;feedrate 1
+N180 R2=240					;line 1 lenght
+N190 R3=8000					;laser power 2
+N200 R4=800					;feedrate 2
+N210 R5=2.5					;line 2 lenght 
+N220 R6=5          		 		;Z-Shift
+
+
+;Process Start-up------------------------------------------
+N230 M56					;set chanel 1 as laser-source
+N240 G4 F4					;necessary delay for positioning of the mirror
+N250 M0						;wait for user-input
+;CROSSJET!!!
+;N260 G4 F3
+;N270 G1 Y=+(R5) F500		;go to starting position
+;N280 G1 Z=-5 F100
+N260 M0
+N270 G4 F14
+
+;Create Pattern-------------------------------------
+N280 H=R0					;set laser power on HIGH
+N290 M50 					;turn laser on 
+N300 G1 Y=-R2 F=R1    				;weld on HIGH speed
+N310 M51					;laser off
+;N340 G0 Z=R6					;go 5 mm up
+;N350 H=R3
+;GN360 M50					;laser on
+;N370 G1 Y=-R5 F=R4			;weld on SLOW speed
+;N380 M51     					;turn laser off
+	
+;End of Program--------------------------------------------
+N320 M55					;home mirror
+N330 M30					;program end

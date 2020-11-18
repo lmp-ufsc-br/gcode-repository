@@ -1,0 +1,63 @@
+;Author: Matheus Ferreira Bento
+;Description: It is a code to a laser cladding with wire process.
+;Data: 07/01/2020
+ 
+;General Configurations-----------------------------------
+N100 $AC_TIMER[1]=0		;
+N110 G91			;relative coordinates
+N120 G71			;metric dimension
+N130 G64			;exact stop, modal
+N140 M55			;move laser mirror to home
+N150 G4F4			;delay
+N160 M0				;wait for command
+
+;R-Parameters---------------------------------------------
+N170 R0=51			;laser power: 5 stacks, 2kW
+
+N180 R1=40			;bead width
+
+N190 R2=1500               	;speed with laser on
+
+N200 R3=4000                    ;speed with laser off
+
+
+
+;Process Start-up------------------------------------------
+N210 M56			;move laser mirror to channel 1
+N220 G4F4			;4 seconds delay for optic positioning
+N230 M76			;CROSSJET!!!!!!!!!!
+N240 M0				;wait for command
+
+;Laser On and Path-----------------------------------------
+
+  N250 H1=R0				;set laser power
+  N260 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;laser on 
+  N270 M78	                        ;wire feeding 
+  N280 G4F0.5
+  N290 G1 X=(R1) F=R2
+  N300 M79                              ;stop wire feeding
+  N310 G1 X=3 Z=3 F=2500                         ;
+  N320 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;laser off
+  N321 G1 X=1 Z=-3 F=500
+  
+
+
+;End of Program--------------------------------------------
+N330 G4F3                       ;delay to cross jet off
+N340 M77			;cross jet off
+N350 M55			;
+N360 M30			;end of program
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 

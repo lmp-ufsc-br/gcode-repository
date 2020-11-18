@@ -1,0 +1,33 @@
+;Author:Francisco Ratusznei
+;Used for constrained strategy. It prints two sets of weld beads
+;It is possible to change the power for the second set of beads
+;To do that, uncoment H0 into the sub program and set the power on R6 
+
+N100 PROC CONST_SUB
+
+;General Config.--------------------
+N110 G71			; Metric system units (just length)
+N120 G91			; Relative coordinates
+
+;Laser On and Path------------------
+N130 R11=0           ;INCREMENT VARIABLE
+N140 R12=0           ;INCREMENT VARIABLE
+N150 H=R0            ;LASER POWER FOR BEAD 1
+N160 
+;------------------------------     	;FIRST BEAD
+N170 
+N180        WHILE(R11<R3)		;BEAD 1 LOOP
+N190            ID=1 WHEN $AC_TIMER[1]>=0 DO M50 	;turn laser on wi
+N200            G1 X=R1 F=R50           ;FIRST LINE
+N210            ID=1 WHEN $AC_TIMER[1]>=0 DO M51 	;turn laser off
+N220            G1 X=-R1 Y=-(R8) F=R51	 ;RWRURN COMAND
+N230            R11=R11+1	         ;INCREMENT VARIABLE
+N240        ENDWHILE
+N250      ID=1 WHEN $AC_TIMER[1]>=0 DO M50 		;turn laser on with  
+N260      G1 X=R1 F=R50            	 ;LAST LINE
+N270      ID=1 WHEN $AC_TIMER[1]>=0 DO M51 		;turn laser off
+;N280      G1 Y=-((R8*R3)-(R8/2)) X=R2 F=R51
+N420 M30
+
+;End of subprogram--------------------
+N430 RET 

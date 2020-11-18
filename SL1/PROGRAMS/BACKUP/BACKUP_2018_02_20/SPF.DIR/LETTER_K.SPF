@@ -1,0 +1,26 @@
+;Author: Marina Brant
+;Letter K
+;Laser power (RO), letter height(R1), letter width (R2), spacing within letters (R3), speed with laser (R4), speed without laser (R5)
+
+N100 PROC LETTER_K
+
+; General Configurations---------------------------------
+N110 G71			; Metric system units (just length)
+N120 G91			; Relative coordinates
+N130 G641				;cont path mode with programmable transition rounding
+N140 G603				;end of interpolation block change at ipo end of block
+
+;Laser On and Path:-----------------------------------------
+N150 H=R0				;set laser power
+N160 M50				;turn on laser beam
+N170 G1 X=(-R1) F=R4			;draw with velocity with laser
+N180 M51				;turn off laser beam
+N190 G1 Y=(-R2) F=R5			;move with velocity with no laser
+N200 M50				;turn on laser beam
+N210 G1 X=(R1/2) Y=(R2) F=R4		;draw with velocity with laser
+N220 G1 X=(R1/2) Y=(-R2) F=R4		;draw with velocity with laser
+N230 M51				;turn off laser beam
+N240 G1 Y=(-R3) F=R5			;move with velocity with no laser space btw letters
+
+;END OF SUBPROGRAM--------------------------
+N250 RET				

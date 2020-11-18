@@ -1,0 +1,45 @@
+N100 PROC LEISTUNGSRAMPE_XY2
+N110 DEF INT COUNTER=0
+;N120 DEF INT TIMEOUT=0
+N130 DEF INT STEPS=0
+N100 $AC_TIMER[2]=0
+
+N140 G91
+N150 G64
+
+;------------------------------------------------------------------------------------------
+;R51=0							;Anfangsleistung (M39 H)
+;R52=1524							;Schlussleistung (M39 H)
+;------------------mit Bewegung------------------------------------------------------------
+;R53=0							;X Abstand (mm) 
+;R54=-20							;Y Abstand (mm)		
+;R55=0.05							;Bewegungsschritte (mm)
+;R56=132							;Vorschubgeschwindigkeit (mm/min)
+;------------------kein Bewegung-----------------------------------------------------------
+;R57=0.01							;Zeitschritte
+;R58=2							;Anzahl der Zeitschritte
+;------------------------------------------------------------------------------------------
+N160 R60=(R52-R51)						;Rampenhöhe
+
+N290 R59=(R54)/(ABS(R55))	
+N300		R61=R60/R59
+;N310		TIMEOUT=0
+N320		STEPS=(R59)		
+					
+N400	R62=(R53/R59)
+N410	R63=(R54/R59)
+N420	R64=(R59-(TRUNC(R59)))
+N430	R65=(R61*R64)
+N440	R66=(R62*R64)
+N450	R67=(R63*R64)
+
+;N480	id=1 when $ac_timer[1]>=0 do M
+N460	WHILE (COUNTER<STEPS)
+N470	R50=(R51+(R61*COUNTER))
+N480	id=1 when $ac_timer[2]>=0 do H=R50
+N490	G1 X=R62 Y=R63 F=R56
+N500	COUNTER=COUNTER+1
+N510	ENDWHILE
+	
+	
+N630 M17

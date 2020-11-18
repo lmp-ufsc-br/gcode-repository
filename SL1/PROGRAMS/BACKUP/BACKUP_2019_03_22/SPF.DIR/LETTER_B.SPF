@@ -1,0 +1,40 @@
+; Author : NIVALDO V.Jr.
+;Letter B
+;Laser power (RO), letter height(R1), letter width (R2), spacing within letters (R3), speed with laser (R4), speed without laser (R5)
+
+N100 PROC LETTER_B
+
+; General Configurations---------------------------------
+N110 G71			; Metric system units (just length)
+N120 G91			;relative positioning
+N130 G641			;
+N140 G603			;
+
+;Laser On and Path-----------------------------------
+;N150 M0			;Stop
+
+N160	IF (R2>=((R1)/4))
+N170		H=R0 M50
+N180		G1 x=-R1 F=R4
+N190		G1 y=-((R2)-0.25*(R1))
+N200		G3 X=((R1)*0.5) CR=(R1)*0.25
+N210		G1 Y=((R2)-0.25*(R1))
+N220		M51 F=R5
+N230		G1 Y=-((R2)-0.25*(R1))
+N240		M50 F=R4
+N250		G3 X=((R1)*0.5) CR=(R1)*0.25
+N260		G1 Y=((R2)-0.25*(R1))
+N270		M51 F=R5
+N280		G1 Y=-(R2+R3)
+N290	ELSE
+N300		H=R0 M50
+N310		G1 x=-R1 F=R4
+N320		CIP X=((R1)*0.5) I1=((R1)*0.25) J1=-R2
+N330		CIP X=((R1)*0.5) I1=((R1)*0.25) J1=-R2
+N340		M51 F=R5
+N350		G1 Y=-(R2+R3)
+N360	ENDIF
+	
+
+;End of Subprogramm-----------------------------------------------------------
+N370 RET

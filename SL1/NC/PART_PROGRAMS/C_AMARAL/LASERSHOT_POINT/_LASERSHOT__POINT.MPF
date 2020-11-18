@@ -4,12 +4,12 @@
  
 ;General Configurations-----------------------------------
 N100 $AC_TIMER[1]=0	;Start Timer
-N110 G91		;Relative Coordinates
-N120 G71		;Metric System
-N130 G64		;
-N140 M55		;Home Laser Channel
-N150 G4F4		;necessary delay for positioning of the mirror
-N270 M0	   	  	;wait for user-input
+N110 G91		; Relative Coordinates
+N120 G71		; Metric System
+N130 G64		; Continuous path mode
+N140 M55		; Move laser mirror to home
+N150 G4F4		; Delay in 4 seconds the process
+N270 M0	   	; Wait for user-input
 
 ;R-Parameters----------------------------------------------
 N170 R0=15             	;Laser Power
