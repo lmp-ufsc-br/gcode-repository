@@ -1,0 +1,21 @@
+;Author: VIVIANE K.F.
+;Letter V
+;Laser power (RO), letter height(R1), letter width (R2), spacing within letters (R3), speed with laser (R4), speed without laser (R5)
+
+N100 PROC LETTER_V
+
+; General Configurations---------------------------------
+N110 G71			; Metric system units (just length)
+N120 G91			; Relative coordinates
+N130 G641			;
+N140 G603			;
+
+;Laser On and Path------------------
+N150 M50   			 ;laser on
+N160 G1 x=-R1 y=-(R2/2) F=r4
+N170 G1 x=R1 y=-R2/2 F=r4
+N180 M51			 ;laser of
+N190 G0 y=-R3
+
+;END SUBPROGRAM-------------------------
+N200 RET

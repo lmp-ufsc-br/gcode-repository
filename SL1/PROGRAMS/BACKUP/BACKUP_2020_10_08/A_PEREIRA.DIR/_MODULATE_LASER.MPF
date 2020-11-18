@@ -1,0 +1,50 @@
+N380 
+ 
+;Author:Adriano Pereira
+;Executes a line with modulated laser power
+;V:2019.03.25
+ 
+;General Configurations-----------------------------------
+N100 $AC_TIMER[1]=0	;Start Timer
+N110 G91		;Relative Coordinates
+N120 G71		;Metric System
+N130 G64		;
+N140 M55		;Home Laser Channel
+N150 G4F4		;necessary delay for positioning of the mirror
+N160 M0	   	  	;wait for user-input
+
+;R-Parameters----------------------------------------------
+N170 R1=750            ;Feed Rate PROCESS ON
+N180 R2=1000   		;Feed Rate PROCESS OFF
+N190 R3=90    		;X-AXIS
+N200 R4=30             ;POWER
+;Process Start-up------------------------------------------
+N200 M56		;set channel 1 as laser-source 
+N210 G4F4		;necessary delay for positioning of the mirror
+N220 M78            	;GAS 1 ON
+N230 M76            	;CROSSJET!!!!!!!!!!!!!!!!
+N240 M0	   	  	;wait for user-input
+
+;Laser On and Path-----------------------------------------
+N250 M82    	;Bit A1
+;N291 M83    	;Bit A0
+;N300 M84    	;Bit B1
+;N293 M85    	;Bit B0
+N260 M86	;Modulation ON
+  
+;N370 H1=R4
+N270 ID=1 WHEN $AC_TIMER[1]>=0 DO M50 
+N280 G1 X=R3 F=R1
+N290 ID=1 WHEN $AC_TIMER[1]>=0 DO M51
+N300 G1 X=10 F=R2
+
+N310 M87	;Modulation OFF
+
+;End of Program--------------------------------------------
+N320 G4 F3
+N330 M77            	;CROSSJET OFF
+N340 M79            	;GAS 1 OFF
+N350 M55		;home laser ressonator
+N360 M30		;program end
+
+ 

@@ -1,0 +1,85 @@
+;Author: David Hausch
+;Programm for two perpendicular layers
+;when setting R3 OR R8 set other parameter to 0
+
+
+;general config----------------------------------
+N100 G91				;relative positioning
+N110 G641				;
+N120 G603				;
+N130 M55				;home mirror
+N140 G4F4				;necessary delay for positioning of the mirror
+N150 M0				;wait for user-input
+
+;R-parameters-------------------------------------
+;set R3 or R8 to ZERO!
+N160 R0=1000				;laser power
+N170 R1=23				;height of the layer
+N180 R2=17				;width of the layer
+N190 R3=10				;number of lines
+N200 R6=1000				;speed with laser on
+N210 R7=2000				;speed with laser off
+N220 R8=0				;space between lines
+N230 R10=2				;thickness of layer
+
+;Process Start-up----------------------------------
+N240 M56			;set canal 1 as laser-source
+N250 G4F4			;necessary delay for positioning of the mirror
+N260 M0			;wait for user-input
+;START POWDER!!!
+N270 G4F15
+
+N280 IF (R3==0)			;check which parameter is given by user
+N290	R3=R1/R8
+N300 ELSE
+N310	R8=R1/R3
+N320 ENDIF
+N330 H=R0
+
+;PATH----------------------------------------------
+N340 LAY_1:				;print 1st layer
+N350	M50
+N360	G1 Y=-R2 F=R6
+N370	M51
+N380	G1 X=-R8 Y=R2 F=R7
+N390 REPEAT LAY_1 P=TRUNC(R3)
+
+N400 IF (R3>TRUNC(R3))		;check if the last line needs to be added
+G1 X=R8-(R1-TRUNC(R3)*R8) F=R7
+N410	M50
+N420	G1 Y=-R2 F=R6
+N430	M51
+N440	G1 X=R1 Y=R2 Z=R10 F=R7
+N450 ELSE
+N460	G1 X=(TRUNC(R3)+1)*R8 Z=R10 F=R7
+N470 ENDIF
+
+N480 IF (R1<>R2)
+N490	R3=R2/R8			;determine number of lines for 2nd layer
+N500 ENDIF
+
+N510 LAY_2:				;print 2nd layer
+N520	M50
+N530	G1 X=-R1 F=R6
+N540	M51
+N550	G1 X=R1 Y=-R8 F=R7
+N560 REPEAT LAY_2 P=TRUNC(R3)
+
+N570 IF (R3>TRUNC(R3))		;check for the last line
+N580	G1 Y=R8-(R2-TRUNC(R3)*R8) F=R7
+N590	M50
+N600	G1 X=-R1 F=R6
+N610	M51
+N620	G1 X=R1 Y=R2 Z=R10 F=R7
+N630 ELSE
+N640	G1 Y=(TRUNC(R3)+1)*R8 Z=R10 F=R7
+N650 ENDIF
+
+M0
+;TURN OFF POWDER!!!
+M0
+G4F15
+
+;End of Programm--------------------
+M55				;home mirror
+M30				;program end

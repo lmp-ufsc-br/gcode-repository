@@ -1,0 +1,70 @@
+;Author: Lara Grübber Dutra
+;GRID
+
+;General Config.---------
+G91		;relative positioning
+G641		;
+G603		;
+M55		;home mirror
+G4F4		;necessary delay for positioning of the mirror
+M0		;wait for user-input
+
+;R-Parameters------------
+R0=1000		;Laser Power [W]
+R1=100		;height [mm]
+R2=100		;width [mm]
+R3=10		;number of lines
+R4=1		;number of layers
+R5=3000		;Speed with laser on
+R6=3000		;Speed with laser off
+
+;Other Variables---------
+DEF INT COUNTER=1
+DEF INT COUNTER_LAYER=1
+
+;Process Start-up Horizontal--------
+M56		;set channel 1 as laser=source
+G4F4		;necessary delay for positioning of the mirror
+M0		;wait for user-input
+
+WHILE (COUNTER_LAYER<=R4)
+WHILE (COUNTER <= R3)
+	M50		;turn laser on
+	G1 Y=R2 F=R5
+	M51		;turn laser off
+	G1 X=R1/(R3-1) Y=-R2 F=R6
+	COUNTER=COUNTER+1
+ENDWHILE
+
+G1 X=-(R1+(R1/(R3-1))) F=R6
+
+	
+
+;End of Program
+M55		;home mirror
+M17		;program end
+
+;Process Start-up Vertical
+M56		;set channel 1 as laser=source
+G4F4		;necessary delay for positioning of the mirror
+M0		;wait for user-input
+DEF INT COUNTER=1
+DEF INT COUNTER_LAYER=1
+
+WHILE (COUNTER_LAYER<=R4)
+WHILE (COUNTER*R8 <= R2)
+	M50		;turn laser on
+	G1 X=R1 F=R5
+	M51		;turn laser off
+	G1 X=-R1 Y=R8 F=R6
+	COUNTER=COUNTER+1
+ENDWHILE
+
+G1 Y=R2+R8 F=R6
+COUNTER_LAYER=COUNTER_LAYER+1
+ENDWHILE
+
+;End of Program
+M55		;home mirror
+M17		;program end
+

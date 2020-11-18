@@ -1,0 +1,28 @@
+;Author: Matheus Ferreira Bento
+;Description: It is a code to a laser cladding with wire process.
+;Data: 07/01/2020
+ 
+;General Configurations-----------------------------------
+N100 $AC_TIMER[1]=0		;
+N100 G91			;relative coordinates
+N110 G71			;metric dimension
+N110 G60			;exact stop, modal
+
+N320 M78	                ;wire feeding 
+N430 G4F3                       ;delay 
+N340 M79                        ;stop wire feeding
+N460 M30			;end of program
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 

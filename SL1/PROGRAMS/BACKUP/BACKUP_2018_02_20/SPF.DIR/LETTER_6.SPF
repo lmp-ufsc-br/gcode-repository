@@ -1,0 +1,23 @@
+;Author: Gabriel Fraga
+;Number 6
+;It draws the number 6 in accordance with the standard size and variables
+
+N100 PROC LETTER_6          ;define subprogram name
+
+;General Configurations----------------------------------------------
+N110 G71                    ; Metric units
+N120 G91                    ; Relative coordinates system
+N130 G64                    ; Continuous-path mode 
+N140 G603                   ; step enable if set point reached
+
+;Laser on and path---------------------------------------------------
+N150 G0 X=(R1/4)                       ; point 1
+N160 M50                               ; laser ON
+N170 G3 J=-(R2/2)                      ; full circle
+N180 G1 x=0.05 F=R4                    ; point 2
+N190 CT X=((3/4)*R1) Y=-R2             ; point 3
+N200 M51                               ; laser OFF
+
+;End of subprogram-------------------------------------------------------
+N210 M17                                        ; end subprogram
+N220 RET                                        ; return main program

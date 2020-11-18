@@ -1,0 +1,96 @@
+;Author: Bruno Weber de Castro
+;Description: A square that turns into a circle in safe mode
+;Data: 10/04/2019
+
+;General Configurations-----------------------------------
+N100 $AC_TIMER[1]=0  ; Starts the timer.
+N110 G71       ; Metric system
+N120 G91       ; Relative cordinates
+N130 G64       ; Continuous-path mode
+N140 M55       ; Home
+N150 G4F4      ; Delay for optical positioning
+N160 M0        ; Stop
+
+;R-Parameters----------------------------------------------
+N170 R0 = 23   ; Square side
+N180 R1 = 0.5  ; LAYER height
+N190 R2 = 31   ; Angle (max 35)
+N200 R4 = 0    ; Counter
+N210 R5 = 500     ; Laser On speed
+N220 R6 = 11    ; Non transition part height
+N230 R7 = 0    ; New radius
+N240 R8 = 1500     ; Laser Off speed
+N250 R9 = 100     ; Laser power
+N260 R10 = 100     ; Powder flow
+ 
+N270 R3 = R1*(TAN(R2)/(SQRT(2)-1))      ; Radius
+
+;Process Start-up------------------------------------------
+ 
+N280 M78       ; Gas on
+N290 M56       ; Channel 1
+N300 G4F4      ; Delay
+N310 M0        ; Stop
+ 
+;Path------------------------------------------------------
+N320 H1 = R9     ; Laser power
+N330 H2 = R10     ; Powder flow value
+N340 M62       ; Powder mixer on
+N350 M64       ; Carrier gas on      
+N360 M66       ; Powder feed on
+N370 G4F5      ; Delay TO powder flow stabilization
+
+N380 WHILE ((R4*R1) < R6)		; Square part
+N390  ID=1 WHEN $AC_TIMER[1]>=0 DO M88 	; Laser pointer on
+N400  G1 X=(R0/2) F=R5
+N410  G1 Y=R0
+N420  G1 X=(-R0)
+N430  G1 Y=(-R0)
+N440  G1 X=(R0/2)
+N450  ID=1 WHEN $AC_TIMER[1]>=0 DO M89 	; Laser pointer off
+N460  G1 Z=R1 F=R8
+N470  R4 = R4+1   ; increment counter
+N480 ENDWHILE
+
+N490 R4 = 0       ; Reset the counter
+N500 R7 = R3
+
+N510 WHILE (R7 < (R0/2))	; transition part
+N520  ID=1 WHEN $AC_TIMER[1]>=0 DO M88 	; Laser pointer on
+N530  G1 X=((R0/2)-R7) F=R5
+N540  G3 X=R7 Y=R7 CR=R7
+N550  G1 Y=(R0-(2*R7))
+N560  G3 X=-R7 Y=R7 CR=R7
+N570  G1 X=-(R0-(2*R7))
+N580  G3 X=-R7 Y=-R7 CR=R7
+N590  G1 Y=-(R0-(2*R7))
+N600  G3 X=R7 Y=-R7 CR=R7
+N610  G1 X=((R0/2)-R7)
+N620  ID=1 WHEN $AC_TIMER[1]>=0 DO M89 	; Laser pointer off
+N630  G1 Z=R1 F=R8
+N640  R4 = R4+1            ; increment counter
+N650  R7 = R3*R4
+N660 ENDWHILE
+
+N670 R4 = 0        ; Reset the counter
+
+N680 WHILE ((R4*R1) < R6)		; Circle part
+N690  ID=1 WHEN $AC_TIMER[1]>=0 DO M88 	; Laser pointer on
+N700  G3 Y=R0 CR=(R0/2) F=R5
+N710  G3 Y=-R0 CR=(R0/2)
+N720  ID=1 WHEN $AC_TIMER[1]>=0 DO M89 	; Laser pointer off
+N730  G1 Z=R1 F=R8
+N740  R4 = R4+1             ; increment counter
+N750 ENDWHILE
+
+N760 M63       ; Powder mixer off
+N770 M65       ; Carrier gas off
+       
+N780 M67       ; Powder feed off
+
+ ;End of program----------------------------------------
+N790 G4F4
+N800 M79       ; Shield gas off
+N810 M55	      ; Home
+N820 G4F4       ; Delay for optical positioning
+N830 M30

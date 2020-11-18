@@ -1,0 +1,83 @@
+N100 $AC_TIMER[1]=0 
+;Author: Adriano Pereira
+;This program creates 48 linear beads arranged in colummns and rowss accordinly
+;to the lab's standart laser cladding sample.
+
+;General Configurations-----------------------------------
+N110 G91			;relative positioning
+N120 G641			;turn off delay due to reading of comments
+N130 G603			;interpolate the end of the line
+N140 M55			;home mirror
+N150 G4F4			;necessary delay for positioning of the mirror				
+N160 M0				;stop program until next input
+
+;R-Parameters---------------------------------------------
+N170 R0=3474	;Inital Laser Power
+N180 R1=0   	;Laser Power Step
+N190 R2=300 	;Initial Speed
+N200 R3=350 	;Speed Step
+N210 R4=1000	;Travel Speed
+;R5=1	;Set 1 for 4 columns, set 2 for 8 columns 
+N220 R6=20	;Line lenght (20 or 20,5)
+
+;Process Start-up------------------------------------------
+N230 M56			;set canal 1 as laser-source
+N240 G4F4			;necessary delay for positioning of the mirror
+N250 M0
+;START POWDER!!!
+N260 G4F10
+N270 M0
+
+;Laser On and Path-----------------------------------------	
+
+N280 G0 X=-5 F=R4			;go to starting position
+
+N290 SAMPLEGROUP:
+N300 H=R0
+N310 R7=3			;number of speeds
+
+N320 WHILE (R7 > 0)
+N330	G1 Y=-(4+((R6+4)*(R7-1))) F=(R2+(R3*(R7-1)))
+N340	ID=1 WHEN $AC_TIMER[1]>=0 DO M50 	
+N350    G1 Y=-(R6)
+N360	ID=1 WHEN $AC_TIMER[1]>=0 DO M51
+N370	G1 Y=-(4)
+N380	G1 Y=(4+((R6+4)*R7)) F=R4
+N390    R7=R7-1
+N400 ENDWHILE
+
+N410 G1 X=-7
+
+N420 R0=R0+R1
+N430 REPEAT SAMPLEGROUP P=2
+
+N440 G0 X=-5 			;move to next line group
+
+N450 SAMPLEGROUP2:
+N460 H=R0
+N470 R7=3			;number of speeds
+
+N480 WHILE (R7 > 0)
+N490	G1 Y=-(4+((R6+4)*(R7-1))) F=(R2+(R3*(R7-1)))
+N500	ID=1 WHEN $AC_TIMER[1]>=0 DO M50 	
+N510    G1 Y=-(R6)
+N520	ID=1 WHEN $AC_TIMER[1]>=0 DO M51
+N530	G1 Y=-(4)
+N540	G1 Y=(4+((R6+4)*R7)) F=R4
+N550    R7=R7-1
+N560 ENDWHILE
+
+N570 G1 X=-7 F=R4
+
+N580 R0=R0+R1
+N590 REPEAT SAMPLEGROUP2 P=2
+
+N600 G1 X=+52 Y-94 F=R4
+
+;End of Programm--------------------
+N610 M0
+;TURN OFF POWDER!!!
+N620 M0
+N630 G4F5
+N640 M55			;home mirror
+N650 M30			;program end

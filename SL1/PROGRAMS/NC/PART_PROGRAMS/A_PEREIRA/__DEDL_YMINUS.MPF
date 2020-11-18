@@ -1,0 +1,69 @@
+;Author: Adriano Pereira
+;program to deposit IncX750 - 3 STACKS
+
+;General Configurations-----------------------------------
+N100 $AC_TIMER[1]=0	;Start Timer
+N110 G91		;Relative Coordinates
+N120 G71		;Metric System
+N130 G64		;
+N140 M55		;Home Laser Channel
+N150 G4F4		;necessary delay for positioning of the mirror
+N160 M0	   	  	;wait for user-input	
+
+;R-Parameters---------------------------------------------
+N170 R0=34		   	;laser power
+N180 R1=24		   	;X-length
+N190 R2=20 		   	;Y-length
+N200 R3=0.30		 	;overlapping percentage
+;R4=N. of lines
+N210 R5=300		  	;Feedrate laser ON
+N220 R6=2			;Delay for Powder Stabilization
+N230 R7=2.65	 		;width of the clad determined by earlier tests
+;R8=Distance between lines
+;R9=Layers counter
+N240 R10=0.34			;Z-Step
+N250 R11=1000			;Feedrate laser OFF
+N260 R12=0.58     		;Powder Flow (0.87 RPM)
+
+
+;Process Start-up------------------------------------------
+N270 M56		;set channel 1 as laser-source
+N280 G4F4		;necessary delay for positioning of the mirror
+N290 M78		;Shielding Gas ON
+N300 M0
+
+;Laser On and Path-----------------------------------------	
+
+N310 R8=R7*(1-R3)	;spacing between lines
+N320 R4=TRUNC(R1/(R8*2))	;N. of repetitions (LINES X2)
+N330 H1=R0
+
+N340 H2=R12		;Set Powder Flow
+N350 M64		;Carrier Gas ON
+N360 M66		;Powder Feed ON
+
+N370 G1 Y0 X0 F=R11		     	; 
+N380 G4 F=R6		;Delay for Powder Flow Stabilization 
+
+N390    LINE:   				;create rectangle 
+N400	    ID=1 WHEN $AC_TIMER[1]>=0 DO M50 	;turn laser on with preset power
+N410	    G1 Y=-(R2) F=R5		     	;
+N420	    ID=1 WHEN $AC_TIMER[1]>=0 DO M51 	;turn laser on with preset power
+N430	    G1 X=+(R8) F=R11		     	; 
+N440	    ID=1 WHEN $AC_TIMER[1]>=0 DO M50 	;turn laser on with preset power
+N450	    G1 Y=+(R2) F=R5		     	;  
+N460	    ID=1 WHEN $AC_TIMER[1]>=0 DO M51 	;turn laser off
+N470	    G1 X=+(R8) F=R11	     		;	
+N480    REPEAT LINE P=R4		     	;end loop "LINE"
+
+N490    G1 Y0 X=-((R8*((R4+1)*2))) F=R11	;Back to corner
+N500	G1 Z=+(R10) F500			;
+
+N510    M67		;Powder Feed OFF
+N520    M65		;Carrier Gas OFF
+
+;End of Programm---------------------------------------------
+N530 G4 F3		;Delay for Safety
+N540 M79            	;Shielding Gas OFF
+N550 M55		;home laser ressonator
+N560 M30		;program end

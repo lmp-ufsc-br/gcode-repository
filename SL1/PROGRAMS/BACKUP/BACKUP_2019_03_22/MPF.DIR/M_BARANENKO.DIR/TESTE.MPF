@@ -1,0 +1,36 @@
+;Author: Max Baranenko Rodrigues
+;Description: It writes the letters previously defined as subprograms.
+ 
+;General Configurations-----------------------------------
+N100 $AC_TIMER[1]=0		;
+N110 G91			;
+N120 G71			; 
+N130 G64			;
+N140 M55			;
+N150 G4F4			;
+N160 M0				;
+
+;R-Parameters---------------------------------------------
+N170 R0=15			;
+N180 R1=17			;
+N190 R2=11			;
+N200 R3=9			;
+N210 R50=1000                   ;
+
+;Process Start-up------------------------------------------
+N220 M56				;
+N230 G4F4				;
+N240 M76                ;CROSSJET/POWDER/WIRE/MIG!!!!!!!!!!!	                          
+N250 M0                 ;				
+
+;Laser On and Path-----------------------------------------
+
+N260 H1=R0				;
+N270 LETTER_PP				;
+N280 LETTER_CC				;
+
+
+;End of Program--------------------------------------------
+N290 M77
+N300 M55			;
+N310 M30			;

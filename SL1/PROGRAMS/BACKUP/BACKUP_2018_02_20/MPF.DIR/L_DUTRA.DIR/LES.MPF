@@ -1,0 +1,38 @@
+;Author: LARA
+;LES
+ 
+;General Configurations-----------------------------------
+N100 G91			;relative positioning
+N110 G641			;turn off delay due to reading of comments
+N120 G603                    ;interpolate the line end
+N130 M55			;home mirror
+N140 G4F4			;necessary delay for positioning of the mirror
+N150 M0			;wait for user-input
+
+;R-Parameters-----------------------
+N160 R0=5000			;Laser Power
+N170 R1=10			;X-axis
+N180 R2=6			;Y-axis
+N190 R3=2			;space
+N200 R4=4000			;speed
+N210 R5=4000            ;SPEED NO LASER
+N220 R6=3 ;NUMBER OF LETTERS
+
+
+;Process Start-up------------------------------------------
+N230 M56			;set canal 1 as laser-source
+N240 G4F4			;necessary delay for positioning of the mirror
+N250 M0
+N260 H=R0			;Laserpower
+
+;LASER ON WRITE-------
+N270 LETTER_L
+N280 LETTER_E
+N290 LETTER_S
+N300 G1 X=-(R1+5) Y=(R6*(R2+R3)) F=R5
+
+;End of Program--------------------------------------------
+N310 M55					;home mirror
+N320 M30					;program end
+
+ 

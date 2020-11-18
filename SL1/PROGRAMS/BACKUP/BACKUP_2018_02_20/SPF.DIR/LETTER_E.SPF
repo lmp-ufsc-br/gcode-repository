@@ -1,0 +1,29 @@
+;Author: Lara Grübber Dutra
+;Letter E
+;Laser power (RO), letter height(R1), letter width (R2), spacing within letters (R3), speed with laser (R4), speed without laser (R5)
+
+N100 PROC LETTER_E
+
+;General Config.--------------------
+N110 G71			; Metric system units (just length)
+N120 G91			; Relative coordinates
+N130 G641			;
+N140 G603
+
+;Laser On and Pattern----------------------------------
+N150 M50		;turn laser on
+N160 G1 X=-R1 F=R4
+N170 G1 Y=-R2 F=R4
+N180 M51		;turn laser off
+N190 G1 X=(R1/2) Y=R2 F=R5
+N200 M50		;turn laser on
+N210 G1 Y=-R2 F=R4
+N220 M51		;turn laser off
+N230 G1 X=(R1/2) Y=R2 F=R5
+N240 M50		;turn laser on
+N250 G1 Y=-R2 F=R4
+N260 M51		;turn laser off
+N270 G1 Y=-R3 F=R5
+
+;End of subprogram-----------
+N280 RET

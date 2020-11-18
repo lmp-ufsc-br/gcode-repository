@@ -1,0 +1,1211 @@
+;Author: Adriano Pereira 
+;Description: It deposits InconelX750+TiC cuboid to provide creep test samples. 3 Stacks.
+;Data:03/09/2019
+ 
+;General Configurations-----------------------------------
+N100 $AC_TIMER[1]=0		;Start Timer
+N110 G91			;Relative Coordinates
+N120 G71			;Metric System
+N130 G64			;
+N140 M55			;Home Laser Channel
+N150 G4F4			;
+N160 M0				;Wait for User Input
+
+;R-Parameters---------------------------------------------
+N170 R0=19			;Line Lenght
+N180 R1=56 			;Laser Power (730 W)
+N190 R2=300			;Speed w/ Laser
+N200 R3=1000			;Speed without Laser
+N210 R4=1.60			;Powder Flow (5.5 g/min OR 2.19 RPM)
+N220 R5=1.0			;Delay for Powder Stabilization
+N230 R6=0.676 			;Base Z-Step 
+N240 R7=3.116			;Track width (Track "44")	
+N250 R8=0.20			;Overlapping percentage
+N260 R9=R7*(1-R8)		;Track Spacement
+
+;Process Start-up------------------------------------------
+N270 M56			;Select Channel 1
+N280 G4F4			;
+N290 M0				;Wait for User Input
+
+;Laser On and Path----------------------------------------- 
+
+N300 H1=R1 				;Set Laser Power
+N310 H2=R4				;Set Powder Flow
+
+N320 M78				;Shielding Gas ON	
+N330 M64				;Carrier Gas ON
+N340 M66				;Powder Feed ON
+N350 G4 F=R5				;Delay for Powder Flow Stabilization
+
+N360 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 1-1
+N370 G1 Y=+R0 F=R2			;
+N380 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N390 G1 X=+R9 F=R3			;
+N400 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 1-2
+N410 G1 Y=-R0 F=R2			;
+N420 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N430 G1 X=+R9 F=R3			;
+N440 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 1-3
+N450 G1 Y=+R0 F=R2			;
+N460 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N470 G1 X=+R9 F=R3			;
+ 
+N480 M67				;Powder Feed OFF
+N490 M65				;Carrier Gas Off
+N500 M79				;Shielding Gas Off
+N510 M55				;Home Laser Channel
+N520 G4F4				;SAFETY FIRST!
+;--------------- POWDER REFILL
+N530 M0				;Wait for user Input 1
+N540 M56				;Select Channel 1
+N550 G4F4				;BEWARE!
+N560 M0				;Wait for user Input 2
+
+N570 M78				;Shielding Gas ON	
+N580 M64				;Carrier Gas ON
+N590 M66				;Powder Feed ON
+N600 G4 F=R5				;Delay for Powder Flow Stabilization
+
+N610 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 1-4
+N620 G1 Y=-R0 F=R2			;
+N630 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N640 G1 X=+R9 F=R3			;
+N650 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 1-5
+N660 G1 Y=+R0 F=R2			;
+N670 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N680 G1 X=+R9 F=R3			;
+N690 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 1-6
+N700 G1 Y=-R0 F=R2			;
+N710 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N720 G1 X=+R9 F=R3			;
+
+N730 M67				;Powder Feed OFF
+N740 M65				;Carrier Gas Off
+N750 M79				;Shielding Gas Off
+N760 M55				;Home Laser Channel
+N770 G4F4				;SAFETY FIRST!
+;--------------- POWDER REFILL
+N780 M0				;Wait for user Input 1
+N790 M56				;Select Channel 1
+N800 G4F4				;BEWARE!
+N810 M0				;Wait for user Input 2
+
+N820 M78				;Shielding Gas ON	
+N830 M64				;Carrier Gas ON
+N840 M66				;Powder Feed ON
+N850 G4 F=R5				;Delay for Powder Flow Stabilization
+
+N860 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 1-7
+N870 G1 Y=+R0 F=R2			;
+N880 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N890 G1 X=+R9 F=R3			;
+N900 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 1-8
+N910 G1 Y=-R0 F=R2			;
+N920 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N930 G1 X=+R9 F=R3			;
+N940 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 1-9
+N950 G1 Y=+R0 F=R2			;
+N960 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N970 G1 X=+R9 F=R3			;
+N980 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 1-10
+N990 G1 Y=-R0 F=R2			;
+N1000 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N1010 G1 X=+R9 F=R3			;
+
+N1020 M67				;Powder Feed OFF
+N1030 M65				;Carrier Gas Off
+N1040 M79				;Shielding Gas Off
+N1050 M55				;Home Laser Channel
+N1060 G4F4				;SAFETY FIRST!
+
+N1070 G1 Z=+R6 F=500			;Move to next layer
+N1080 G1 X=-(R9*10)
+
+;------////----LAYER 2----////---- POWDER REFILL
+
+N1090 M0				;Wait for user Input 1
+N1100 M56				;Select Channel 1
+N1110 G4F4				;BEWARE!
+N1120 M0				;Wait for user Input 2
+
+N1130 M78				;Shielding Gas ON	
+N1140 M64				;Carrier Gas ON
+N1150 M66				;Powder Feed ON
+N1160 G4 F=R5				;Delay for Powder Flow Stabilization
+
+N1170 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 2-1
+N1180 G1 Y=+R0 F=R2			;
+N1190 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N1200 G1 X=+R9 F=R3			;
+N1210 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 2-2
+N1220 G1 Y=-R0 F=R2			;
+N1230 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N1240 G1 X=+R9 F=R3			;
+N1250 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 2-3
+N1260 G1 Y=+R0 F=R2			;
+N1270 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N1280 G1 X=+R9 F=R3			;
+ 
+N1290 M67				;Powder Feed OFF
+N1300 M65				;Carrier Gas Off
+N1310 M79				;Shielding Gas Off
+N1320 M55				;Home Laser Channel
+N1330 G4F4				;SAFETY FIRST!
+;--------------- POWDER REFILL
+N1340 M0				;Wait for user Input 1
+N1350 M56				;Select Channel 1
+N1360 G4F4				;BEWARE!
+N1370 M0				;Wait for user Input 2
+
+N1380 M78				;Shielding Gas ON	
+N1390 M64				;Carrier Gas ON
+N1400 M66				;Powder Feed ON
+N1410 G4 F=R5				;Delay for Powder Flow Stabilization
+
+N1420 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 2-4
+N1430 G1 Y=-R0 F=R2			;
+N1440 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N1450 G1 X=+R9 F=R3			;
+N1460 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 2-5
+N1470 G1 Y=+R0 F=R2			;
+N1480 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N1490 G1 X=+R9 F=R3			;
+N1500 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 2-6
+N1510 G1 Y=-R0 F=R2			;
+N1520 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N1530 G1 X=+R9 F=R3			;
+
+N1540 M67				;Powder Feed OFF
+N1550 M65				;Carrier Gas Off
+N1560 M79				;Shielding Gas Off
+N1570 M55				;Home Laser Channel
+N1580 G4F4				;SAFETY FIRST!
+;--------------- POWDER REFILL
+N1590 M0				;Wait for user Input 1
+N1600 M56				;Select Channel 1
+N1610 G4F4				;BEWARE!
+N1620 M0				;Wait for user Input 2
+
+N1630 M78				;Shielding Gas ON	
+N1640 M64				;Carrier Gas ON
+N1650 M66				;Powder Feed ON
+N1660 G4 F=R5				;Delay for Powder Flow Stabilization
+
+N1670 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 2-7
+N1680 G1 Y=+R0 F=R2			;
+N1690 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N1700 G1 X=+R9 F=R3			;
+N1710 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 2-8
+N1720 G1 Y=-R0 F=R2			;
+N1730 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N1740 G1 X=+R9 F=R3			;
+N1750 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 2-9
+N1760 G1 Y=+R0 F=R2			;
+N1770 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N1780 G1 X=+R9 F=R3			;
+N1790 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 2-10
+N1800 G1 Y=-R0 F=R2			;
+N1810 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N1820 G1 X=+R9 F=R3			;
+
+N1830 M67				;Powder Feed OFF
+N1840 M65				;Carrier Gas Off
+N1850 M79				;Shielding Gas Off
+N1860 M55				;Home Laser Channel
+N1870 G4F4				;SAFETY FIRST!
+
+N1880 G1 Z=+R6 F=500			;Move to next layer
+N1890 G1 X=-(R9*10)
+
+;------////----LAYER 3----////---- POWDER REFILL
+
+N1900 M0				;Wait for user Input 1
+N1910 M56				;Select Channel 1
+N1920 G4F4				;BEWARE!
+N1930 M0				;Wait for user Input 2
+
+N1940 M78				;Shielding Gas ON	
+N1950 M64				;Carrier Gas ON
+N1960 M66				;Powder Feed ON
+N1970 G4 F=R5				;Delay for Powder Flow Stabilization
+
+N1980 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 3-1
+N1990 G1 Y=+R0 F=R2			;
+N2000 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N2010 G1 X=+R9 F=R3			;
+N2020 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 3-2
+N2030 G1 Y=-R0 F=R2			;
+N2040 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N2050 G1 X=+R9 F=R3			;
+N2060 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 3-3
+N2070 G1 Y=+R0 F=R2			;
+N2080 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N2090 G1 X=+R9 F=R3			;
+ 
+N2100 M67				;Powder Feed OFF
+N2110 M65				;Carrier Gas Off
+N2120 M79				;Shielding Gas Off
+N2130 M55				;Home Laser Channel
+N2140 G4F4				;SAFETY FIRST!
+;--------------- POWDER REFILL
+N2150 M0				;Wait for user Input 1
+N2160 M56				;Select Channel 1
+N2170 G4F4				;BEWARE!
+N2180 M0				;Wait for user Input 2
+
+N2190 M78				;Shielding Gas ON	
+N2200 M64				;Carrier Gas ON
+N2210 M66				;Powder Feed ON
+N2220 G4 F=R5				;Delay for Powder Flow Stabilization
+
+N2230 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 3-4
+N2240 G1 Y=-R0 F=R2			;
+N2250 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N2260 G1 X=+R9 F=R3			;
+N2270 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 3-5
+N2280 G1 Y=+R0 F=R2			;
+N2290 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N2300 G1 X=+R9 F=R3			;
+N2310 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 3-6
+N2320 G1 Y=-R0 F=R2			;
+N2330 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N2340 G1 X=+R9 F=R3			;
+
+N2350 M67				;Powder Feed OFF
+N2360 M65				;Carrier Gas Off
+N2370 M79				;Shielding Gas Off
+N2380 M55				;Home Laser Channel
+N2390 G4F4				;SAFETY FIRST!
+;--------------- POWDER REFILL
+N2400 M0				;Wait for user Input 1
+N2410 M56				;Select Channel 1
+N2420 G4F4				;BEWARE!
+N2430 M0				;Wait for user Input 2
+
+N2440 M78				;Shielding Gas ON	
+N2450 M64				;Carrier Gas ON
+N2460 M66				;Powder Feed ON
+N2470 G4 F=R5				;Delay for Powder Flow Stabilization
+
+N2480 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 3-7
+N2490 G1 Y=+R0 F=R2			;
+N2500 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N2510 G1 X=+R9 F=R3			;
+N2520 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 3-8
+N2530 G1 Y=-R0 F=R2			;
+N2540 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N2550 G1 X=+R9 F=R3			;
+N2560 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 3-9
+N2570 G1 Y=+R0 F=R2			;
+N2580 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N2590 G1 X=+R9 F=R3			;
+N2600 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 3-10
+N2610 G1 Y=-R0 F=R2			;
+N2620 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N2630 G1 X=+R9 F=R3			;
+
+N2640 M67				;Powder Feed OFF
+N2650 M65				;Carrier Gas Off
+N2660 M79				;Shielding Gas Off
+N2670 M55				;Home Laser Channel
+N2680 G4F4				;SAFETY FIRST!
+
+N2690 G1 Z=+R6 F=500			;Move to next layer
+N2700 G1 X=-(R9*10)
+
+;------////----LAYER 4----////---- POWDER REFILL
+
+N2710 M0				;Wait for user Input 1
+N2720 M56				;Select Channel 1
+N2730 G4F4				;BEWARE!
+N2740 M0				;Wait for user Input 2
+
+N2750 M78				;Shielding Gas ON	
+N2760 M64				;Carrier Gas ON
+N2770 M66				;Powder Feed ON
+N2780 G4 F=R5				;Delay for Powder Flow Stabilization
+
+N2790 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 4-1
+N2800 G1 Y=+R0 F=R2			;
+N2810 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N2820 G1 X=+R9 F=R3			;
+N2830 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 4-2
+N2840 G1 Y=-R0 F=R2			;
+N2850 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N2860 G1 X=+R9 F=R3			;
+N2870 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 4-3
+N2880 G1 Y=+R0 F=R2			;
+N2890 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N2900 G1 X=+R9 F=R3			;
+ 
+N2910 M67				;Powder Feed OFF
+N2920 M65				;Carrier Gas Off
+N2930 M79				;Shielding Gas Off
+N2940 M55				;Home Laser Channel
+N2950 G4F4				;SAFETY FIRST!
+;--------------- POWDER REFILL
+N2960 M0				;Wait for user Input 1
+N2970 M56				;Select Channel 1
+N2980 G4F4				;BEWARE!
+N2990 M0				;Wait for user Input 2
+
+N3000 M78				;Shielding Gas ON	
+N3010 M64				;Carrier Gas ON
+N3020 M66				;Powder Feed ON
+N3030 G4 F=R5				;Delay for Powder Flow Stabilization
+
+N3040 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 4-4
+N3050 G1 Y=-R0 F=R2			;
+N3060 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N3070 G1 X=+R9 F=R3			;
+N3080 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 4-5
+N3090 G1 Y=+R0 F=R2			;
+N3100 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N3110 G1 X=+R9 F=R3			;
+N3120 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 4-6
+N3130 G1 Y=-R0 F=R2			;
+N3140 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N3150 G1 X=+R9 F=R3			;
+
+N3160 M67				;Powder Feed OFF
+N3170 M65				;Carrier Gas Off
+N3180 M79				;Shielding Gas Off
+N3190 M55				;Home Laser Channel
+N3200 G4F4				;SAFETY FIRST!
+;--------------- POWDER REFILL
+N3210 M0				;Wait for user Input 1
+N3220 M56				;Select Channel 1
+N3230 G4F4				;BEWARE!
+N3240 M0				;Wait for user Input 2
+
+N3250 M78				;Shielding Gas ON	
+N3260 M64				;Carrier Gas ON
+N3270 M66				;Powder Feed ON
+N3280 G4 F=R5				;Delay for Powder Flow Stabilization
+
+N3290 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 4-7
+N3300 G1 Y=+R0 F=R2			;
+N3310 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N3320 G1 X=+R9 F=R3			;
+N3330 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 4-8
+N3340 G1 Y=-R0 F=R2			;
+N3350 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N3360 G1 X=+R9 F=R3			;
+N3370 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 4-9
+N3380 G1 Y=+R0 F=R2			;
+N3390 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N3400 G1 X=+R9 F=R3			;
+N3410 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 4-10
+N3420 G1 Y=-R0 F=R2			;
+N3430 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N3440 G1 X=+R9 F=R3			;
+
+N3450 M67				;Powder Feed OFF
+N3460 M65				;Carrier Gas Off
+N3470 M79				;Shielding Gas Off
+N3480 M55				;Home Laser Channel
+N3490 G4F4				;SAFETY FIRST!
+
+N3500 G1 Z=+R6 F=500			;Move to next layer
+N3510 G1 X=-(R9*10)
+
+;------////----LAYER 5----////---- POWDER REFILL
+
+N3520 M0				;Wait for user Input 1
+N3530 M56				;Select Channel 1
+N3540 G4F4				;BEWARE!
+N3550 M0				;Wait for user Input 2
+
+N3560 M78				;Shielding Gas ON	
+N3570 M64				;Carrier Gas ON
+N3580 M66				;Powder Feed ON
+N3590 G4 F=R5				;Delay for Powder Flow Stabilization
+
+N3600 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 5-1
+N3610 G1 Y=+R0 F=R2			;
+N3620 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N3630 G1 X=+R9 F=R3			;
+N3640 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 5-2
+N3650 G1 Y=-R0 F=R2			;
+N3660 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N3670 G1 X=+R9 F=R3			;
+N3680 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 5-3
+N3690 G1 Y=+R0 F=R2			;
+N3700 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N3710 G1 X=+R9 F=R3			;
+ 
+N3720 M67				;Powder Feed OFF
+N3730 M65				;Carrier Gas Off
+N3740 M79				;Shielding Gas Off
+N3750 M55				;Home Laser Channel
+N3760 G4F4				;SAFETY FIRST!
+;--------------- POWDER REFILL
+N3770 M0				;Wait for user Input 1
+N3780 M56				;Select Channel 1
+N3790 G4F4				;BEWARE!
+N3800 M0				;Wait for user Input 2
+
+N3810 M78				;Shielding Gas ON	
+N3820 M64				;Carrier Gas ON
+N3830 M66				;Powder Feed ON
+N3840 G4 F=R5				;Delay for Powder Flow Stabilization
+
+N3850 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 5-4
+N3860 G1 Y=-R0 F=R2			;
+N3870 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N3880 G1 X=+R9 F=R3			;
+N3890 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 5-5
+N3900 G1 Y=+R0 F=R2			;
+N3910 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N3920 G1 X=+R9 F=R3			;
+N3930 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 5-6
+N3940 G1 Y=-R0 F=R2			;
+N3950 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N3960 G1 X=+R9 F=R3			;
+
+N3970 M67				;Powder Feed OFF
+N3980 M65				;Carrier Gas Off
+N3990 M79				;Shielding Gas Off
+N4000 M55				;Home Laser Channel
+N4010 G4F4				;SAFETY FIRST!
+;--------------- POWDER REFILL
+N4020 M0				;Wait for user Input 1
+N4030 M56				;Select Channel 1
+N4040 G4F4				;BEWARE!
+N4050 M0				;Wait for user Input 2
+
+N4060 M78				;Shielding Gas ON	
+N4070 M64				;Carrier Gas ON
+N4080 M66				;Powder Feed ON
+N4090 G4 F=R5				;Delay for Powder Flow Stabilization
+
+N4100 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 5-7
+N4110 G1 Y=+R0 F=R2			;
+N4120 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N4130 G1 X=+R9 F=R3			;
+N4140 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 5-8
+N4150 G1 Y=-R0 F=R2			;
+N4160 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N4170 G1 X=+R9 F=R3			;
+N4180 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 5-9
+N4190 G1 Y=+R0 F=R2			;
+N4200 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N4210 G1 X=+R9 F=R3			;
+N4220 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 5-10
+N4230 G1 Y=-R0 F=R2			;
+N4240 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N4250 G1 X=+R9 F=R3			;
+
+N4260 M67				;Powder Feed OFF
+N4270 M65				;Carrier Gas Off
+N4280 M79				;Shielding Gas Off
+N4290 M55				;Home Laser Channel
+N4300 G4F4				;SAFETY FIRST!
+
+N4310 G1 Z=+R6 F=500			;Move to next layer
+N4320 G1 X=-(R9*10)
+
+;------////----LAYER 6----////---- POWDER REFILL
+
+N4330 M0				;Wait for user Input 1
+N4340 M56				;Select Channel 1
+N4350 G4F4				;BEWARE!
+N4360 M0				;Wait for user Input 2
+
+N4370 M78				;Shielding Gas ON	
+N4380 M64				;Carrier Gas ON
+N4390 M66				;Powder Feed ON
+N4400 G4 F=R5				;Delay for Powder Flow Stabilization
+
+N4410 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 6-1
+N4420 G1 Y=+R0 F=R2			;
+N4430 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N4440 G1 X=+R9 F=R3			;
+N4450 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 6-2
+N4460 G1 Y=-R0 F=R2			;
+N4470 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N4480 G1 X=+R9 F=R3			;
+N4490 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 6-3
+N4500 G1 Y=+R0 F=R2			;
+N4510 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N4520 G1 X=+R9 F=R3			;
+ 
+N4530 M67				;Powder Feed OFF
+N4540 M65				;Carrier Gas Off
+N4550 M79				;Shielding Gas Off
+N4560 M55				;Home Laser Channel
+N4570 G4F4				;SAFETY FIRST!
+;--------------- POWDER REFILL
+N4580 M0				;Wait for user Input 1
+N4590 M56				;Select Channel 1
+N4600 G4F4				;BEWARE!
+N4610 M0				;Wait for user Input 2
+
+N4620 M78				;Shielding Gas ON	
+N4630 M64				;Carrier Gas ON
+N4640 M66				;Powder Feed ON
+N4650 G4 F=R5				;Delay for Powder Flow Stabilization
+
+N4660 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 6-4
+N4670 G1 Y=-R0 F=R2			;
+N4680 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N4690 G1 X=+R9 F=R3			;
+N4700 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 6-5
+N4710 G1 Y=+R0 F=R2			;
+N4720 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N4730 G1 X=+R9 F=R3			;
+N4740 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 6-6
+N4750 G1 Y=-R0 F=R2			;
+N4760 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N4770 G1 X=+R9 F=R3			;
+
+N4780 M67				;Powder Feed OFF
+N4790 M65				;Carrier Gas Off
+N4800 M79				;Shielding Gas Off
+N4810 M55				;Home Laser Channel
+N4820 G4F4				;SAFETY FIRST!
+;--------------- POWDER REFILL
+N4830 M0				;Wait for user Input 1
+N4840 M56				;Select Channel 1
+N4850 G4F4				;BEWARE!
+N4860 M0				;Wait for user Input 2
+
+N4870 M78				;Shielding Gas ON	
+N4880 M64				;Carrier Gas ON
+N4890 M66				;Powder Feed ON
+N4900 G4 F=R5				;Delay for Powder Flow Stabilization
+
+N4910 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 6-7
+N4920 G1 Y=+R0 F=R2			;
+N4930 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N4940 G1 X=+R9 F=R3			;
+N4950 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 6-8
+N4960 G1 Y=-R0 F=R2			;
+N4970 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N4980 G1 X=+R9 F=R3			;
+N4990 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 6-9
+N5000 G1 Y=+R0 F=R2			;
+N5010 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N5020 G1 X=+R9 F=R3			;
+N5030 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 6-10
+N5040 G1 Y=-R0 F=R2			;
+N5050 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N5060 G1 X=+R9 F=R3			;
+
+N5070 M67				;Powder Feed OFF
+N5080 M65				;Carrier Gas Off
+N5090 M79				;Shielding Gas Off
+N5100 M55				;Home Laser Channel
+N5110 G4F4				;SAFETY FIRST!
+
+N5120 G1 Z=+R6 F=500			;Move to next layer
+N5130 G1 X=-(R9*10)
+
+;------////----LAYER 7----////---- POWDER REFILL
+
+N5140 M0				;Wait for user Input 1
+N5150 M56				;Select Channel 1
+N5160 G4F4				;BEWARE!
+N5170 M0				;Wait for user Input 2
+
+N5180 M78				;Shielding Gas ON	
+N5190 M64				;Carrier Gas ON
+N5200 M66				;Powder Feed ON
+N5210 G4 F=R5				;Delay for Powder Flow Stabilization
+
+N5220 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 7-1
+N5230 G1 Y=+R0 F=R2			;
+N5240 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N5250 G1 X=+R9 F=R3			;
+N5260 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 7-2
+N5270 G1 Y=-R0 F=R2			;
+N5280 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N5290 G1 X=+R9 F=R3			;
+N5300 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 7-3
+N5310 G1 Y=+R0 F=R2			;
+N5320 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N5330 G1 X=+R9 F=R3			;
+ 
+N5340 M67				;Powder Feed OFF
+N5350 M65				;Carrier Gas Off
+N5360 M79				;Shielding Gas Off
+N5370 M55				;Home Laser Channel
+N5380 G4F4				;SAFETY FIRST!
+;--------------- POWDER REFILL
+N5390 M0				;Wait for user Input 1
+N5400 M56				;Select Channel 1
+N5410 G4F4				;BEWARE!
+N5420 M0				;Wait for user Input 2
+
+N5430 M78				;Shielding Gas ON	
+N5440 M64				;Carrier Gas ON
+N5450 M66				;Powder Feed ON
+N5460 G4 F=R5				;Delay for Powder Flow Stabilization
+
+N5470 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 7-4
+N5480 G1 Y=-R0 F=R2			;
+N5490 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N5500 G1 X=+R9 F=R3			;
+N5510 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 7-5
+N5520 G1 Y=+R0 F=R2			;
+N5530 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N5540 G1 X=+R9 F=R3			;
+N5550 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 7-6
+N5560 G1 Y=-R0 F=R2			;
+N5570 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N5580 G1 X=+R9 F=R3			;
+
+N5590 M67				;Powder Feed OFF
+N5600 M65				;Carrier Gas Off
+N5610 M79				;Shielding Gas Off
+N5620 M55				;Home Laser Channel
+N5630 G4F4				;SAFETY FIRST!
+;--------------- POWDER REFILL
+N5640 M0				;Wait for user Input 1
+N5650 M56				;Select Channel 1
+N5660 G4F4				;BEWARE!
+N5670 M0				;Wait for user Input 2
+
+N5680 M78				;Shielding Gas ON	
+N5690 M64				;Carrier Gas ON
+N5700 M66				;Powder Feed ON
+N5710 G4 F=R5				;Delay for Powder Flow Stabilization
+
+N5720 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 7-7
+N5730 G1 Y=+R0 F=R2			;
+N5740 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N5750 G1 X=+R9 F=R3			;
+N5760 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 7-8
+N5770 G1 Y=-R0 F=R2			;
+N5780 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N5790 G1 X=+R9 F=R3			;
+N5800 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 7-9
+N5810 G1 Y=+R0 F=R2			;
+N5820 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N5830 G1 X=+R9 F=R3			;
+N5840 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 7-10
+N5850 G1 Y=-R0 F=R2			;
+N5860 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N5870 G1 X=+R9 F=R3			;
+
+N5880 M67				;Powder Feed OFF
+N5890 M65				;Carrier Gas Off
+N5900 M79				;Shielding Gas Off
+N5910 M55				;Home Laser Channel
+N5920 G4F4				;SAFETY FIRST!
+
+N5930 G1 Z=+R6 F=500			;Move to next layer
+N5940 G1 X=-(R9*10)
+
+;------////----LAYER 8----////---- POWDER REFILL
+
+N5950 M0				;Wait for user Input 1
+N5960 M56				;Select Channel 1
+N5970 G4F4				;BEWARE!
+N5980 M0				;Wait for user Input 2
+
+N5990 M78				;Shielding Gas ON	
+N6000 M64				;Carrier Gas ON
+N6010 M66				;Powder Feed ON
+N6020 G4 F=R5				;Delay for Powder Flow Stabilization
+
+N6030 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 8-1
+N6040 G1 Y=+R0 F=R2			;
+N6050 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N6060 G1 X=+R9 F=R3			;
+N6070 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 8-2
+N6080 G1 Y=-R0 F=R2			;
+N6090 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N6100 G1 X=+R9 F=R3			;
+N6110 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 8-3
+N6120 G1 Y=+R0 F=R2			;
+N6130 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N6140 G1 X=+R9 F=R3			;
+ 
+N6150 M67				;Powder Feed OFF
+N6160 M65				;Carrier Gas Off
+N6170 M79				;Shielding Gas Off
+N6180 M55				;Home Laser Channel
+N6190 G4F4				;SAFETY FIRST!
+;--------------- POWDER REFILL
+N6200 M0				;Wait for user Input 1
+N6210 M56				;Select Channel 1
+N6220 G4F4				;BEWARE!
+N6230 M0				;Wait for user Input 2
+
+N6240 M78				;Shielding Gas ON	
+N6250 M64				;Carrier Gas ON
+N6260 M66				;Powder Feed ON
+N6270 G4 F=R5				;Delay for Powder Flow Stabilization
+
+N6280 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 8-4
+N6290 G1 Y=-R0 F=R2			;
+N6300 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N6310 G1 X=+R9 F=R3			;
+N6320 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 8-5
+N6330 G1 Y=+R0 F=R2			;
+N6340 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N6350 G1 X=+R9 F=R3			;
+N6360 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 8-6
+N6370 G1 Y=-R0 F=R2			;
+N6380 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N6390 G1 X=+R9 F=R3			;
+
+N6400 M67				;Powder Feed OFF
+N6410 M65				;Carrier Gas Off
+N6420 M79				;Shielding Gas Off
+N6430 M55				;Home Laser Channel
+N6440 G4F4				;SAFETY FIRST!
+;--------------- POWDER REFILL
+N6450 M0				;Wait for user Input 1
+N6460 M56				;Select Channel 1
+N6470 G4F4				;BEWARE!
+N6480 M0				;Wait for user Input 2
+
+N6490 M78				;Shielding Gas ON	
+N6500 M64				;Carrier Gas ON
+N6510 M66				;Powder Feed ON
+N6520 G4 F=R5				;Delay for Powder Flow Stabilization
+
+N6530 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 8-7
+N6540 G1 Y=+R0 F=R2			;
+N6550 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N6560 G1 X=+R9 F=R3			;
+N6570 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 8-8
+N6580 G1 Y=-R0 F=R2			;
+N6590 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N6600 G1 X=+R9 F=R3			;
+N6610 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 8-9
+N6620 G1 Y=+R0 F=R2			;
+N6630 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N6640 G1 X=+R9 F=R3			;
+N6650 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 8-10
+N6660 G1 Y=-R0 F=R2			;
+N6670 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N6680 G1 X=+R9 F=R3			;
+
+N6690 M67				;Powder Feed OFF
+N6700 M65				;Carrier Gas Off
+N6710 M79				;Shielding Gas Off
+N6720 M55				;Home Laser Channel
+N6730 G4F4				;SAFETY FIRST!
+
+N6740 G1 Z=+R6 F=500			;Move to next layer
+N6750 G1 X=-(R9*10)
+
+;------////----LAYER 9----////---- POWDER REFILL
+
+N6760 M0				;Wait for user Input 1
+N6770 M56				;Select Channel 1
+N6780 G4F4				;BEWARE!
+N6790 M0				;Wait for user Input 2
+
+N6800 M78				;Shielding Gas ON	
+N6810 M64				;Carrier Gas ON
+N6820 M66				;Powder Feed ON
+N6830 G4 F=R5				;Delay for Powder Flow Stabilization
+
+N6840 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 9-1
+N6850 G1 Y=+R0 F=R2			;
+N6860 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N6870 G1 X=+R9 F=R3			;
+N6880 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 9-2
+N6890 G1 Y=-R0 F=R2			;
+N6900 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N6910 G1 X=+R9 F=R3			;
+N6920 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 9-3
+N6930 G1 Y=+R0 F=R2			;
+N6940 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N6950 G1 X=+R9 F=R3			;
+ 
+N6960 M67				;Powder Feed OFF
+N6970 M65				;Carrier Gas Off
+N6980 M79				;Shielding Gas Off
+N6990 M55				;Home Laser Channel
+N7000 G4F4				;SAFETY FIRST!
+;--------------- POWDER REFILL
+N7010 M0				;Wait for user Input 1
+N7020 M56				;Select Channel 1
+N7030 G4F4				;BEWARE!
+N7040 M0				;Wait for user Input 2
+
+N7050 M78				;Shielding Gas ON	
+N7060 M64				;Carrier Gas ON
+N7070 M66				;Powder Feed ON
+N7080 G4 F=R5				;Delay for Powder Flow Stabilization
+
+N7090 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 9-4
+N7100 G1 Y=-R0 F=R2			;
+N7110 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N7120 G1 X=+R9 F=R3			;
+N7130 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 9-5
+N7140 G1 Y=+R0 F=R2			;
+N7150 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N7160 G1 X=+R9 F=R3			;
+N7170 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 9-6
+N7180 G1 Y=-R0 F=R2			;
+N7190 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N7200 G1 X=+R9 F=R3			;
+
+N7210 M67				;Powder Feed OFF
+N7220 M65				;Carrier Gas Off
+N7230 M79				;Shielding Gas Off
+N7240 M55				;Home Laser Channel
+N7250 G4F4				;SAFETY FIRST!
+;--------------- POWDER REFILL
+N7260 M0				;Wait for user Input 1
+N7270 M56				;Select Channel 1
+N7280 G4F4				;BEWARE!
+N7290 M0				;Wait for user Input 2
+
+N7300 M78				;Shielding Gas ON	
+N7310 M64				;Carrier Gas ON
+N7320 M66				;Powder Feed ON
+N7330 G4 F=R5				;Delay for Powder Flow Stabilization
+
+N7340 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 9-7
+N7350 G1 Y=+R0 F=R2			;
+N7360 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N7370 G1 X=+R9 F=R3			;
+N7380 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 9-8
+N7390 G1 Y=-R0 F=R2			;
+N7400 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N7410 G1 X=+R9 F=R3			;
+N7420 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 9-9
+N7430 G1 Y=+R0 F=R2			;
+N7440 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N7450 G1 X=+R9 F=R3			;
+N7460 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 9-10
+N7470 G1 Y=-R0 F=R2			;
+N7480 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N7490 G1 X=+R9 F=R3			;
+
+N7500 M67				;Powder Feed OFF
+N7510 M65				;Carrier Gas Off
+N7520 M79				;Shielding Gas Off
+N7530 M55				;Home Laser Channel
+N7540 G4F4				;SAFETY FIRST!
+
+N7550 G1 Z=+R6 F=500			;Move to next layer
+N7560 G1 X=-(R9*10)
+
+;------////----LAYER 10----////---- POWDER REFILL
+
+N7570 M0				;Wait for user Input 1
+N7580 M56				;Select Channel 1
+N7590 G4F4				;BEWARE!
+N7600 M0				;Wait for user Input 2
+
+N7610 M78				;Shielding Gas ON	
+N7620 M64				;Carrier Gas ON
+N7630 M66				;Powder Feed ON
+N7640 G4 F=R5				;Delay for Powder Flow Stabilization
+
+N7650 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 10-1
+N7660 G1 Y=+R0 F=R2			;
+N7670 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N7680 G1 X=+R9 F=R3			;
+N7690 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 10-2
+N7700 G1 Y=-R0 F=R2			;
+N7710 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N7720 G1 X=+R9 F=R3			;
+N7730 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 10-3
+N7740 G1 Y=+R0 F=R2			;
+N7750 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N7760 G1 X=+R9 F=R3			;
+ 
+N7770 M67				;Powder Feed OFF
+N7780 M65				;Carrier Gas Off
+N7790 M79				;Shielding Gas Off
+N7800 M55				;Home Laser Channel
+N7810 G4F4				;SAFETY FIRST!
+;--------------- POWDER REFILL
+N7820 M0				;Wait for user Input 1
+N7830 M56				;Select Channel 1
+N7840 G4F4				;BEWARE!
+N7850 M0				;Wait for user Input 2
+
+N7860 M78				;Shielding Gas ON	
+N7870 M64				;Carrier Gas ON
+N7880 M66				;Powder Feed ON
+N7890 G4 F=R5				;Delay for Powder Flow Stabilization
+
+N7900 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 10-4
+N7910 G1 Y=-R0 F=R2			;
+N7920 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N7930 G1 X=+R9 F=R3			;
+N7940 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 10-5
+N7950 G1 Y=+R0 F=R2			;
+N7960 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N7970 G1 X=+R9 F=R3			;
+N7980 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 10-6
+N7990 G1 Y=-R0 F=R2			;
+N8000 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N8010 G1 X=+R9 F=R3			;
+
+N8020 M67				;Powder Feed OFF
+N8030 M65				;Carrier Gas Off
+N8040 M79				;Shielding Gas Off
+N8050 M55				;Home Laser Channel
+N8060 G4F4				;SAFETY FIRST!
+;--------------- POWDER REFILL
+N8070 M0				;Wait for user Input 1
+N8080 M56				;Select Channel 1
+N8090 G4F4				;BEWARE!
+N8100 M0				;Wait for user Input 2
+
+N8110 M78				;Shielding Gas ON	
+N8120 M64				;Carrier Gas ON
+N8130 M66				;Powder Feed ON
+N8140 G4 F=R5				;Delay for Powder Flow Stabilization
+
+N8150 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 10-7
+N8160 G1 Y=+R0 F=R2			;
+N8170 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N8180 G1 X=+R9 F=R3			;
+N8190 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 10-8
+N8200 G1 Y=-R0 F=R2			;
+N8210 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N8220 G1 X=+R9 F=R3			;
+N8230 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 10-9
+N8240 G1 Y=+R0 F=R2			;
+N8250 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N8260 G1 X=+R9 F=R3			;
+N8270 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 10-10
+N8280 G1 Y=-R0 F=R2			;
+N8290 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N8300 G1 X=+R9 F=R3			;
+
+N8310 M67				;Powder Feed OFF
+N8320 M65				;Carrier Gas Off
+N8330 M79				;Shielding Gas Off
+N8340 M55				;Home Laser Channel
+N8350 G4F4				;SAFETY FIRST!
+
+N8360 G1 Z=+R6 F=500			;Move to next layer
+N8370 G1 X=-(R9*10)
+
+;------////----LAYER 11----////---- POWDER REFILL
+
+N8380 M0				;Wait for user Input 1
+N8390 M56				;Select Channel 1
+N8400 G4F4				;BEWARE!
+N8410 M0				;Wait for user Input 2
+
+N8420 M78				;Shielding Gas ON	
+N8430 M64				;Carrier Gas ON
+N8440 M66				;Powder Feed ON
+N8450 G4 F=R5				;Delay for Powder Flow Stabilization
+
+N8460 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 11-1
+N8470 G1 Y=+R0 F=R2			;
+N8480 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N8490 G1 X=+R9 F=R3			;
+N8500 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 11-2
+N8510 G1 Y=-R0 F=R2			;
+N8520 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N8530 G1 X=+R9 F=R3			;
+N8540 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 11-3
+N8550 G1 Y=+R0 F=R2			;
+N8560 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N8570 G1 X=+R9 F=R3			;
+ 
+N8580 M67				;Powder Feed OFF
+N8590 M65				;Carrier Gas Off
+N8600 M79				;Shielding Gas Off
+N8610 M55				;Home Laser Channel
+N8620 G4F4				;SAFETY FIRST!
+;--------------- POWDER REFILL
+N8630 M0				;Wait for user Input 1
+N8640 M56				;Select Channel 1
+N8650 G4F4				;BEWARE!
+N8660 M0				;Wait for user Input 2
+
+N8670 M78				;Shielding Gas ON	
+N8680 M64				;Carrier Gas ON
+N8690 M66				;Powder Feed ON
+N8700 G4 F=R5				;Delay for Powder Flow Stabilization
+
+N8710 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 11-4
+N8720 G1 Y=-R0 F=R2			;
+N8730 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N8740 G1 X=+R9 F=R3			;
+N8750 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 11-5
+N8760 G1 Y=+R0 F=R2			;
+N8770 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N8780 G1 X=+R9 F=R3			;
+N8790 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 11-6
+N8800 G1 Y=-R0 F=R2			;
+N8810 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N8820 G1 X=+R9 F=R3			;
+
+N8830 M67				;Powder Feed OFF
+N8840 M65				;Carrier Gas Off
+N8850 M79				;Shielding Gas Off
+N8860 M55				;Home Laser Channel
+N8870 G4F4				;SAFETY FIRST!
+;--------------- POWDER REFILL
+N8880 M0				;Wait for user Input 1
+N8890 M56				;Select Channel 1
+N8900 G4F4				;BEWARE!
+N8910 M0				;Wait for user Input 2
+
+N8920 M78				;Shielding Gas ON	
+N8930 M64				;Carrier Gas ON
+N8940 M66				;Powder Feed ON
+N8950 G4 F=R5				;Delay for Powder Flow Stabilization
+
+N8960 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 11-7
+N8970 G1 Y=+R0 F=R2			;
+N8980 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N8990 G1 X=+R9 F=R3			;
+N9000 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 11-8
+N9010 G1 Y=-R0 F=R2			;
+N9020 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N9030 G1 X=+R9 F=R3			;
+N9040 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 11-9
+N9050 G1 Y=+R0 F=R2			;
+N9060 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N9070 G1 X=+R9 F=R3			;
+N9080 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 11-10
+N9090 G1 Y=-R0 F=R2			;
+N9100 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N9110 G1 X=+R9 F=R3			;
+
+N9120 M67				;Powder Feed OFF
+N9130 M65				;Carrier Gas Off
+N9140 M79				;Shielding Gas Off
+N9150 M55				;Home Laser Channel
+N9160 G4F4				;SAFETY FIRST!
+
+N9170 G1 Z=+R6 F=500			;Move to next layer
+N9180 G1 X=-(R9*10)
+
+;------////----LAYER 12----////---- POWDER REFILL
+
+N9190 M0				;Wait for user Input 1
+N9200 M56				;Select Channel 1
+N9210 G4F4				;BEWARE!
+N9220 M0				;Wait for user Input 2
+
+N9230 M78				;Shielding Gas ON	
+N9240 M64				;Carrier Gas ON
+N9250 M66				;Powder Feed ON
+N9260 G4 F=R5				;Delay for Powder Flow Stabilization
+
+N9270 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 12-1
+N9280 G1 Y=+R0 F=R2			;
+N9290 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N9300 G1 X=+R9 F=R3			;
+N9310 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 12-2
+N9320 G1 Y=-R0 F=R2			;
+N9330 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N9340 G1 X=+R9 F=R3			;
+N9350 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 12-3
+N9360 G1 Y=+R0 F=R2			;
+N9370 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N9380 G1 X=+R9 F=R3			;
+ 
+N9390 M67				;Powder Feed OFF
+N9400 M65				;Carrier Gas Off
+N9410 M79				;Shielding Gas Off
+N9420 M55				;Home Laser Channel
+N9430 G4F4				;SAFETY FIRST!
+;--------------- POWDER REFILL
+N9440 M0				;Wait for user Input 1
+N9450 M56				;Select Channel 1
+N9460 G4F4				;BEWARE!
+N9470 M0				;Wait for user Input 2
+
+N9480 M78				;Shielding Gas ON	
+N9490 M64				;Carrier Gas ON
+N9500 M66				;Powder Feed ON
+N9510 G4 F=R5				;Delay for Powder Flow Stabilization
+
+N9520 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 12-4
+N9530 G1 Y=-R0 F=R2			;
+N9540 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N9550 G1 X=+R9 F=R3			;
+N9560 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 12-5
+N9570 G1 Y=+R0 F=R2			;
+N9580 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N9590 G1 X=+R9 F=R3			;
+N9600 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 12-6
+N9610 G1 Y=-R0 F=R2			;
+N9620 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N9630 G1 X=+R9 F=R3			;
+
+N9640 M67				;Powder Feed OFF
+N9650 M65				;Carrier Gas Off
+N9660 M79				;Shielding Gas Off
+N9670 M55				;Home Laser Channel
+N9680 G4F4				;SAFETY FIRST!
+;--------------- POWDER REFILL
+N9690 M0				;Wait for user Input 1
+N9700 M56				;Select Channel 1
+N9710 G4F4				;BEWARE!
+N9720 M0				;Wait for user Input 2
+
+N9730 M78				;Shielding Gas ON	
+N9740 M64				;Carrier Gas ON
+N9750 M66				;Powder Feed ON
+N9760 G4 F=R5				;Delay for Powder Flow Stabilization
+
+N9770 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 12-7
+N9780 G1 Y=+R0 F=R2			;
+N9790 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N9800 G1 X=+R9 F=R3			;
+N9810 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 12-8
+N9820 G1 Y=-R0 F=R2			;
+N9830 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N9840 G1 X=+R9 F=R3			;
+N9850 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 12-9
+N9860 G1 Y=+R0 F=R2			;
+N9870 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N9880 G1 X=+R9 F=R3			;
+N9890 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 12-10
+N9900 G1 Y=-R0 F=R2			;
+N9910 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+N9920 G1 X=+R9 F=R3			;
+
+N9930 M67				;Powder Feed OFF
+N9940 M65				;Carrier Gas Off
+N9950 M79				;Shielding Gas Off
+N9960 M55				;Home Laser Channel
+N9970 G4F4				;SAFETY FIRST!
+
+;N9980 G1 Z=+R6 F=500			;Move to next layer (Removed to maintain focus on the next two tracks)
+N9990 G1 X=-(R9*10) F=500
+
+;------////----LAYER 13*----////---- POWDER REFILL
+
+N10000 M0				;Wait for user Input 1
+N10010 M56				;Select Channel 1
+N10020 G4F4				;BEWARE!
+N10030 M0				;Wait for user Input 2
+
+N10040 M78				;Shielding Gas ON	
+N10050 M64				;Carrier Gas ON
+N10060 M66				;Powder Feed ON
+N10070 G4 F=R5				;Delay for Powder Flow Stabilization
+
+N10080 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 13-1
+N10090 G1 Y=+R0 F=R2			;
+N10100 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+
+N10110 G1 X=+(R9*9) F=R3			;
+
+N10120 ID=1 WHEN $AC_TIMER[1]>=0 DO M50	;Position 13-10
+N10130 G1 Y=-R0 F=R2			;
+N10140 ID=1 WHEN $AC_TIMER[1]>=0 DO M51	;
+
+N10150 M67				;Powder Feed OFF
+N10160 M65				;Carrier Gas Off
+N10170 M79				;Shielding Gas Off
+N10180 M55				;Home Laser Channel
+N10190 G4F4				;SAFETY FIRST!
+
+;End of Program--------------------------------------------
+N10200 M55			;
+N10210 M30			;

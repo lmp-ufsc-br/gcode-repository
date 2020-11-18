@@ -1,0 +1,47 @@
+;Author: Rafael Petters da Cunha
+;Letter Q
+;Laser power (RO), letter height(R1), letter width (R2), spacing within letters (R3), speed with laser (R4), speed without laser (R5)
+
+N100 PROC LETTER_Q
+
+; General Configurations---------------------------------
+N110 G71			; Metric system units (just length)
+N120 G91			;relative positioning
+N130 G641			;
+N140 G603			;
+
+;Laser On and Path-----------------------------------
+N190 IF(R2<=R1)
+N200 H=R0
+N210 G0 X=-((R2/2)+(R1-R2))					
+N220 M50							;turn laser on	
+N230 G1 X=(R1-R2)						;left side
+N240 G2 Y=-R2  J=-(R2/2)  F=R4				;rounded superior part
+N250 G1 X=-(R1-R2)	F=R4					;right side
+N260 G2 Y=R2  J=(R2/2)  F=R4					;rounded inferior part
+N270 M51							;turn laser off
+N280 G0 X=-(R2/4) Y=-(R2/2) 					;going to the beginning of the "leg"
+N290 M50							;turn laser on
+N300 G1 X=-(R2/4) Y=-(R2/2)	F=R4				;"leg"
+N310 M51							;turn laser off
+
+N320 ELSE
+
+N330 G0 X=-R1  Y=-(R1/2)
+N340 M50							;turn laser on
+N350 G2 X=R1  I=(R1/2)  F=R4 				;rounded left side
+N360 G1 Y=-(R2-R1) F=R4					;superior straight line
+N370 G2 X=-R1 I=-(R1/2) F=R4					;rounded right side
+N380 G1 Y=(R2-R1)  F=R4					;inferior straight line
+N390 M51							;turn laser off
+N400 G0 X=(R1/4) Y=-(R2-R1)					;going to the beginning of the "leg"
+N410 M50							;turn laser on
+N420 G1 X=-(R1/4) Y=-(R1/2)					;"leg"
+N430 M51							;turn laser off
+
+N440 ENDIF
+
+N450 G0 X=R1 Y=-R3						;return
+
+;End of Programm--------------------
+N460 RET

@@ -1,0 +1,73 @@
+N100 $AC_TIMER[1]=0 
+;Author: Adriano Pereira/Francisco Ratusznei
+;This program creates a square 3D block
+;Enter the line width, overlap and number of layers and rounds  
+
+
+;General Configurations-----------------------------------
+N110 G91			;relative positioning
+N120 G641			;turn off delay due to reading of comments
+N130 G603			;interpolate the end of the line
+N140 M55			;home mirror
+N150 G4F4			;necessary delay for positioning of the mirror				
+N160 M0				;stop program until next input
+
+;R-Parameters---------------------------------------------
+N170 H1=55.00		;Inital Laser Power
+N180 R2=300 			;Initial Speed
+N190 R4=2000			;Travel Speed
+N200 R13=2 			;NUMBER OF ROUNDS
+N210 R15=2 			;DELTA Y INIT
+N220 R16=2			;DELTA X INIT
+N230 R17=13 			;NUMBER OF LAYERS
+N240 R18=1.4 			;DELTAZ
+N250 R11=2.76		;LINE WIDTH
+N260 R12=0.3 		;OVERLAPING
+N270 R10=R11*(1-R12) 	;SPACING
+N280 R30=0 			;CONT ROUNDS
+N290 R31=0 			;COUNT LAYERS
+
+
+;Process Start-up------------------------------------------
+N300 M56		;set canal 1 as laser-source
+N310 G4F4		;necessary delay for positioning of the mirror
+N320 M0			;TÃ_DÃ-DÃ-DÃ...
+
+;Laser On and Path-----------------------------------------	
+
+
+;STARTING POWDER!!!!
+N330 M62	;POWDER MIXER ON
+N340 M64	;CARRIER GAS ON
+N350 M66	;POWDER ON
+N360 G4F10	
+N370 M0
+
+N380 WHILE (R31<=R17)
+
+N390 R30=0
+N400 ID=1 WHEN $AC_TIMER[1]>=0 DO M50 
+N410 WHILE((R30/2)<=R13)
+
+N420 G1 Y=-(R15+(R10*R30)) F=R2
+N430 G1 X=+(R16+(R10*R30)) F=R2
+N440 R30=R30+1
+N450 G1 Y=+(R15+(R10*R30)) F=R2
+N460 G1 X=-(R16+(R10*R30)) F=R2
+N470 R30=R30+1
+N480 ENDWHILE
+N490 ID=1 WHEN $AC_TIMER[1]>=0 DO M51
+N500 G1 Z=+R18 X=+(((R30/2)*R10)) Y=-(((R30/2)*R10)) F=R4
+N510 R31=R31+1
+N520 ENDWHILE
+
+N530 M63	;POWDER MIXER OFF
+N540 M65	;CARRIER GAS OFF
+N550 M67	;POWDER OFF
+
+;End of Programm--------------------
+;N450 G4F5
+N560 M55			;home mirror
+N570 M30			;program end
+
+

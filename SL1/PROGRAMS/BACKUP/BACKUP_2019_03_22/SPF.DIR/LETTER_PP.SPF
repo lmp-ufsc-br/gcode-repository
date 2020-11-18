@@ -1,0 +1,23 @@
+;Author: Max Baranenko Rodrigues
+;Description: Letter (, it draws the letter ( in accordance with the standart size and variables.
+
+N100 PROC LETTER_PP		;
+
+;General Configurations (-----------------------------------
+
+N110 G71  ;
+N120 G91			 ; 
+
+;LASER ON AND PATH--------------------------------------------
+
+   
+N130 H1=46.00              ; Define potência do laser
+N140 R50=2640              ; Define velocidade de soldagem
+N150 G1 X=R2/2	F=R50			;
+N160 ID=1 WHEN $AC_TIMER[1]>=0 DO M50 	;
+N170 G3   Y=-R1 CR=R2 	F=R50	;
+N180 ID=1 WHEN $AC_TIMER[1]>=0 DO M51 	;		
+N190 G1 X=R2/2+R3  Y=R1	F=R50			;
+;End of Subrogram--------------------------------------------
+N200 RET                                ;
+ 

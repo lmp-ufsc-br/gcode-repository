@@ -1,0 +1,41 @@
+;Author:ADRIANO S P PEREIRA
+ 
+;General Configurations-----------------------------------
+N100 $AC_TIMER[1]=0 
+N110 G91			;relative positioning
+N120 G641		   ;turn off delay due to reading of comments
+N130 G603		   ;interpolate the end of the line
+N140 M55			;home mirror
+N150 G4F4		   ;necessary delay for positioning of the mirror				
+N160 M0			 ;stop program until next input
+
+;R-Parameters----------------------------------------------
+N170 R0=20             ;LASER POWER
+N180 R1=0              ;LASER POWER STEP
+N190 R2=900            ;Feed Rate
+N200 R3=1000   		;Feed Rate LASER OFF
+N210 R4=80     		;X-AXIS
+N220 R5=10             ;SPACING WITHIN LINES
+N230 R6=4              ;DEP
+
+;Process Start-up------------------------------------------
+N240 M56		    ;set canal 1 as laser-source 
+N250 G4F4		   ;necessary delay for positioning of the mirror
+;N260 M78           ;GAS 1 ON
+N260 M76            ;CROSSJET ON
+N270 M0	   	  ;wait for user-input
+ 
+;Laser On and Path-----------------------------------------
+
+N280 H1=38.92
+N290 ID=1 WHEN $AC_TIMER[1]>=0 DO M50
+;N320 G1 Y=-20 F=700
+N300 G4F0.5
+N310 ID=1 WHEN $AC_TIMER[1]>=0 DO M51
+
+
+;End of Program--------------------------------------------
+N320 M77            ;CROSSJET OFF
+;N330 M79            ;GAS 1 OFF
+N330 M55			;home mirror
+N340 M30			;program end

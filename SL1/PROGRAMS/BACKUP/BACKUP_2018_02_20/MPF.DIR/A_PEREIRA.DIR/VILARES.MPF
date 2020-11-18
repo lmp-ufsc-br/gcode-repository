@@ -1,0 +1,126 @@
+;Author: Adriano Pereira
+;Villares
+;Start position must be on focus, Laser is OFF within lines.
+
+N100 $ac_timer[1]=0
+
+;General Config.--------------------
+N110 G91			;relative positioning
+N120 G641			;turn off delay 1 
+N130 M55			;home mirror
+N140 G4F3			;necessary delay for positioning of the mirror				
+N150 M0			;wait for user-input
+
+;R-Parameters-----------------------
+;R0=500			;Laser Power
+;R1=500			;Laser Power Step
+;R2=1000		;Initial Speed
+;R3=1500		;Speed Step
+N160 R4=58			;Line Length
+N170 R5=28.71         		;X-Spacement within lines
+N180 R6=10        		;Y-Spacement within lines
+;R7=4         		;X-Spacement from edge
+N190 R8=5         		;Y-Spacement from edge 
+;R9=2			;Number of lines
+;R10=3			;Number of rows	
+N200 R21=9000		;LPower 1
+N210 R22=10000		;LPower 2
+N220 R23=8000		;LPower 3
+N230 R31=800		;TSpeed 1
+N240 R32=1000		;TSpeed 2
+N250 R33=800			;TSpeed 3
+N260 R41=-5			;Focus 1
+N270 R42=-10			;Focus 2
+N280 R43=-5			;Focus 3
+
+;Process Start-up-------------------
+N290 M56			;set canal 1 as laser-source
+N300 G4F3			;necessary delay for positioning of the mirror
+N310 M0			;wait for user-input
+;CROSSJET!!!
+N320 M0
+
+;Laser On and Path------------------
+ 
+N330 WELDBEAD:
+N340 H=R21
+N350 G1 Y=-(R8) Z=(R41) F500
+N360 id=1 when $ac_timer[1]>=0 do M50
+N370 G1 Y=-(R4) F=R31
+N380 id=1 when $ac_timer[1]>=0 do M51
+
+R51=0
+N390 IF (R41<>R42)
+N400	IF(R41<R42)
+N410		IF (R41<=0 AND R42>=0)
+N420			R51=(ABS(R41)+ABS(R42))
+N430		ELSE
+N440			R51=ABS(ABS(R42)-ABS(R41))
+N450		ENDIF
+N460	ELSE
+N470		IF (R41>=0 AND R42<=0)
+N480			R51=(ABS(R41)+ABS(R42))
+N490		ELSE
+N500			R51=ABS(ABS(R41)-ABS(R42))
+N510		ENDIF
+N520		R51=-R51
+N530	ENDIF
+N540 G1  Z=(R51+10) F=2000			
+N550 ENDIF
+
+N560 H=R22
+N570 G1 Y=-(R6) F=R32
+N580 id=1 when $ac_timer[1]>=0 do M50
+N590 G1 Y=-(R4) F=R32
+N600 id=1 when $ac_timer[1]>=0 do M51
+ 
+R52=0
+N610 IF (R42<>R43)
+N620	IF(R42<R43)
+N630		IF (R43>=0 AND R42<=0)
+N640			R52=((ABS(R42))-(ABS(R43)))
+N650		ELSE
+N660			R52=ABS((ABS(R43))-(ABS(R42)))
+N670		ENDIF
+N680	ELSE
+N690		IF (R42>=0 AND R43<=0)
+N700			R52=((ABS(R42))+(ABS(R43)))
+N710		ELSE
+N720			R52=ABS((ABS(R42)-ABS(R43)))
+N730		ENDIF
+N740		R52=-R52
+N750	ENDIF
+N760 G1  Z=(R52) F=2000		
+N770 ENDIF
+
+N780 H=R23
+N790 G1 Y=-(R6) F=R33
+N800 id=1 when $ac_timer[1]>=0 do M50
+N810 G1 Y=-(R4) F=R33
+N820 id=1 when $ac_timer[1]>=0 do M51
+
+N830 R53=0
+N840 IF (R43<>0)
+N850	IF (R43>0)
+N860		R53=+(ABS(R43))
+N870	ELSE
+N880		R53=-(ABS(R43))
+N890	ENDIF
+N900	G1 Z=-R53 F2000
+N910 ENDIF
+
+N920 G1 X=-(R5) Y=+((R4+R8)+(2*(R4+R6))) F2000
+
+N930 REPEAT WELDBEAD P=1
+
+
+N940 G1 X=+(2*R5) F2000
+
+;TURN OFF CROSSJET!!!
+N950 M0
+N960 G4F20
+
+
+;End of Programm--------------------
+N970 M55				;home mirror
+N980 M30				;program end

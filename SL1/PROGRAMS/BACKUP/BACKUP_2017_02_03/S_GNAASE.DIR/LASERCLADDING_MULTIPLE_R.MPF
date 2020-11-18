@@ -1,0 +1,63 @@
+;Author: Stefan Gnaase
+;program is used to create a column with multiple rows consisting of 
+;one-layer surfaces in shape of a rectangle that have different overlapping
+
+;definition of sample parameters
+N0 R0=25					;width(Y-length) of one rectangle
+N1 R1=25					;height(X-length) of one rectangle
+N2 R3=0.5					;overlapping percentage to start from in each column
+N3 R4=0.1					;increment by which overlapping percentage will be decreased
+N4 R5=2000					;feedrate X-Y-axis
+N5 R6=1500					;laserpower
+N6 R7=4					;number of rows
+N7 R8=7					;space between rectangles
+N8 R9=3.5					;space between the outside of the sample to the contour of the rectangle
+N9 R10=1					;width of the clad determined by earlier tests
+
+
+
+
+
+
+;general configurations
+N10 G91						;relative positioning
+N11 G64						;turn off delay due to reading of comments
+N12 M55						;home mirror
+N13 G4F4					;necessary delay for positioning of the mirror
+
+;verify the laserfocus
+N14 G1 X0 Y0 Z50 F500		;quick movement to position zero
+N15 G1 Z-50 F500				
+N16 M0						;stop program until next input
+
+;process-start
+N17 M56						;set canal 1 as laser-source
+N18 G4F4					;necessary delay for positioning of the mirror
+N19 M0
+
+N20 G0 X=-R9				;go to starting position, R12-mm from upper left corner
+N21 G0 Y=-R9				;go to starting position, R12-mm from upper left corner
+
+;POWDER START
+N22 G4F15
+
+N23 ROW:
+N24	R11=R3*R10				;distance between lines
+N25	R12=R0/R11				;number of lines in this rectangle		
+	;create rectangle-pattern
+N26	H=R6 M50 				;turn laser on with 1500Watt 
+N27	LINE:					;start loop "LINE"
+N28		G1 Y=-R0 F=R5		;move in Y-direction 
+N29		M51					;turn laser off
+N30		G1 X=-R3 Y=R0 F=R5	;move in X- and Y-direction
+N31	REPEAT LINE P=R12-1		;end loop "LINE"
+N32	R3=R3-R4				;decrease overlapping
+N33	G0 X=(-R11+R3)			;move preset distance between rectangles in X-direction
+N34 REPEAT ROW Q=R9-1
+N35 G0 Y=(-R11-R0)				;move to start of next column
+
+
+;end of the program
+N36 M55					;home mirror
+N37				;jumppoint if program is not configured correctly
+N38 M30					;program end

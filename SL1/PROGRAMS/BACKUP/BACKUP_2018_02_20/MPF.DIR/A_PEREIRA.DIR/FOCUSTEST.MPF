@@ -1,0 +1,69 @@
+N100 $AC_TIMER[1]=0 
+;Author: Adriano Pereira
+;Initial Laser Cladding Tests
+;Version.1
+
+
+;N110 DEF INT TIMEOUT=0
+
+;General Config.--------------------
+N110 G91			;relative positioning
+N120 G641			;turn off delay 1 
+;N140 G603			;turn off delay 2 
+N130 M55			;home mirror
+N140 G4F4			;necessary delay for positioning of the mirror				
+N150 M0			;wait for user-input
+
+;R-Parameters-----------------------
+N160 R0=2115			;Laser Power
+N170 R1=1000			;Traverse Speed 
+N180 R2=0.3		 	;Exposure time
+N190 R3=5           	;Spacement within dots 
+N200 R4=3           	;Number of Lines ALONG Y-AXIS 
+N210 R5=8           	;Number of Rows
+N220 R6=0         	  ;Y-Spacement from edge 
+N230 R7=5			   ;X-Spacement from edge
+N240 R8=0.25			;Step on Z Upwards
+
+
+;Process Start-up-------------------
+N250 M56			;set canal 1 as laser-source
+N260 G4F4			;necessary delay for positioning of the mirror
+N270 M0			;wait for user-input
+;START POWDER/CROSSJET!!!
+;N300 G4F15
+N280 M0
+
+;Laser On and Path------------------
+N290 G1 X=-(R7) Y=-(R6) F=R1
+N300 G1 Z=-(R4*R5*R8) F=(R1/4)
+
+N310 H=R0
+
+N320 R51=R4
+N330 WHILE (R51>0)		;DO ROW OF DOTS, LENGHT DEPENDS ON NUMBER OF LINES
+
+N340	R50=R5
+N350	WHILE (R50>0)			;DO LINE OF DOTS, LENGHT DEPENDS ON NUMBER OF ROWS
+N360		Id=1 when $ac_timer[1]>=0 do M50
+N370		G4 F=(R2)
+N380		Id=1 when $ac_timer[1]>=0 do M51
+N390		G1 Y=-(R3) F=R1
+N400		Z=(R8) F=(R1/4)
+N410		G4 F1
+N420		R50=R50-1
+N430	ENDWHILE
+N440	G1 X=-(R3) Y=(R3*R5) F=R1
+N460	G4 F1
+N470    R51=R51-1
+
+N480 ENDWHILE
+
+
+;TURN OFF POWDER!!!
+N490 M0
+N500 G4F10
+
+;End of Programm--------------------
+N510 M55				;home mirror
+N520 M30				;program end
