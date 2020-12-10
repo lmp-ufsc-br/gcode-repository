@@ -27,17 +27,18 @@ R22 = 47.5      ; Z+ [mm]
 
 R30 = 6         ; Spacing between beads [mm]
 R31 = 25        ; Bead length [mm]
-R32 = 6         ; Delay between beads [s]
+R32 = 15        ; Delay between beads [s]
+R33 = 3         ; Gas stability delay [s]
 
 R41 = 0.176326  ; Tan(10)
 
 ;Process Start-up------------------------------------------
 
-N290 M56		   ; Set channel 1
-N300 G4F4		   ; Delay for mirror positioning
-     M78       ; Gas ON
-N310 M76       ; Crossjet ON
-N320 M0			   ; Wait for user input
+M56		          ; Set channel 1
+G4F4		        ; Delay for mirror positioning
+M78             ; Gas ON
+M76             ; Crossjet ON
+M0			        ; Wait for user input
 
 ;LASER ON AND PATH--------------------------------------------
 
@@ -51,7 +52,11 @@ ID=1 WHEN $AC_TIMER[1]>=0 DO M50        ; Turn laser on
 G1 X=(R31)  F=R10                       ; Create weld bead
 ID=1 WHEN $AC_TIMER[1]>=0 DO M51        ; Turn laser off
 G1 X=-(R31+R41*R20) Y=R30 Z=-R20 F=R13  ; Move to next position
-G4 F=R32                                ; Delay
+M79                                     ; Gas OFF
+G4 F=R32                                ; Cooling time delay
+M78                                     ; Gas ON
+G4 F=R33                                ; Gas stability delay
+
 
 ; Run 2 (P-, V-, Z+)
 R0=R1                                   ; Define power
@@ -63,7 +68,10 @@ ID=1 WHEN $AC_TIMER[1]>=0 DO M50        ; Turn laser on
 G1 X=(R31)  F=R10                       ; Create weld bead
 ID=1 WHEN $AC_TIMER[1]>=0 DO M51        ; Turn laser off
 G1 X=-(R31+R41*R20) Y=R30 Z=-R20 F=R13  ; Move to next position
-G4 F=R32                                ; Delay
+M79                                     ; Gas OFF
+G4 F=R32                                ; Cooling time delay
+M78                                     ; Gas ON
+G4 F=R33                                ; Gas stability delay
 
 ; Run 3 (P-, V+, Z-)
 R0=R1                                   ; Define power
@@ -75,7 +83,10 @@ ID=1 WHEN $AC_TIMER[1]>=0 DO M50        ; Turn laser on
 G1 X=(R31)  F=R10                       ; Create weld bead
 ID=1 WHEN $AC_TIMER[1]>=0 DO M51        ; Turn laser off
 G1 X=-(R31+R41*R20) Y=R30 Z=-R20 F=R13  ; Move to next position
-G4 F=R32                                ; Delay
+M79                                     ; Gas OFF
+G4 F=R32                                ; Cooling time delay
+M78                                     ; Gas ON
+G4 F=R33                                ; Gas stability delay
 
 ; Run 4 (P-, V+, Z+)
 R0=R1                                   ; Define power
@@ -87,7 +98,10 @@ ID=1 WHEN $AC_TIMER[1]>=0 DO M50        ; Turn laser on
 G1 X=(R31)  F=R10                       ; Create weld bead
 ID=1 WHEN $AC_TIMER[1]>=0 DO M51        ; Turn laser off
 G1 X=-(R31+R41*R20) Y=R30 Z=-R20 F=R13  ; Move to next position
-G4 F=R32                                ; Delay
+M79                                     ; Gas OFF
+G4 F=R32                                ; Cooling time delay
+M78                                     ; Gas ON
+G4 F=R33                                ; Gas stability delay
 
 ; Espacamento
 G1 Y=R30  F=R10
@@ -102,7 +116,10 @@ ID=1 WHEN $AC_TIMER[1]>=0 DO M50        ; Turn laser on
 G1 X=(R31)  F=R10                       ; Create weld bead
 ID=1 WHEN $AC_TIMER[1]>=0 DO M51        ; Turn laser off
 G1 X=-(R31+R41*R20) Y=R30 Z=-R20 F=R13  ; Move to next position
-G4 F=R32                                ; Delay
+M79                                     ; Gas OFF
+G4 F=R32                                ; Cooling time delay
+M78                                     ; Gas ON
+G4 F=R33                                ; Gas stability delay
 
 ; Run 6 (P+, V-, Z+)
 R0=R2                                   ; Define power
@@ -114,7 +131,10 @@ ID=1 WHEN $AC_TIMER[1]>=0 DO M50        ; Turn laser on
 G1 X=(R31)  F=R10                       ; Create weld bead
 ID=1 WHEN $AC_TIMER[1]>=0 DO M51        ; Turn laser off
 G1 X=-(R31+R41*R20) Y=R30 Z=-R20 F=R13  ; Move to next position
-G4 F=R32                                ; Delay
+M79                                     ; Gas OFF
+G4 F=R32                                ; Cooling time delay
+M78                                     ; Gas ON
+G4 F=R33                                ; Gas stability delay
 
 ; Run 7 (P+, V+, Z-)
 R0=R2                                   ; Define power
@@ -126,7 +146,10 @@ ID=1 WHEN $AC_TIMER[1]>=0 DO M50        ; Turn laser on
 G1 X=(R31)  F=R10                       ; Create weld bead
 ID=1 WHEN $AC_TIMER[1]>=0 DO M51        ; Turn laser off
 G1 X=-(R31+R41*R20) Y=R30 Z=-R20 F=R13  ; Move to next position
-G4 F=R32                                ; Delay
+M79                                     ; Gas OFF
+G4 F=R32                                ; Cooling time delay
+M78                                     ; Gas ON
+G4 F=R33                                ; Gas stability delay
 
 ; Run 7 (P+, V+, Z+)
 R0=R2                                   ; Define power
@@ -138,7 +161,6 @@ ID=1 WHEN $AC_TIMER[1]>=0 DO M50        ; Turn laser on
 G1 X=(R31)  F=R10                       ; Create weld bead
 ID=1 WHEN $AC_TIMER[1]>=0 DO M51        ; Turn laser off
 G1 X=-(R31+R41*R20) Y=R30 Z=-R20 F=R13  ; Move to next position
-G4 F=R32                                ; Delay
 
 ; Back to initial position
 G1 Y=-(9*R30)                           ; Go back to initial position
