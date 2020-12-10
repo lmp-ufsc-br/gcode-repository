@@ -1,0 +1,115 @@
+;Author: Calil Amaral
+;Description: Create parallel weld beads with different power and welding speed parameters
+ 
+;General Configurations-----------------------------------
+
+N100 $AC_TIMER[1]=0 
+N110 G91			; Relative positioning
+N120 G64      ; Continuous path mode
+N140 M55			; Home mirror
+N150 G4F4		  ; Delay for mirror positioning
+N160 M0			  ; Wait for user input
+
+;R-Parameters-----------------------
+
+R1 = 15.00      ; P- [Ẃ]
+R2 = 20.00      ; P+ [W]
+
+R10 = 3000      ; V (Laser Off) [mm/min]
+R11 = 625.00    ; V- [mm/min]
+R12 = 1300.00   ; V+ [mm/min]
+
+R21 = 0         ; Z- [mm]
+R22 = 46.5      ; Z+ [mm]
+
+R30 = 6         ; Spacing between beads [mm]
+R31 = 25        ; Bead length [mm]
+R32 = 6         ; Delay between beads [s]
+
+;Process Start-up------------------------------------------
+
+N290 M56		   ; Set channel 1
+N300 G4F4		   ; Delay for mirror positioning
+     M78       ; Gas ON
+N310 M76       ; Crossjet ON
+N320 M0			   ; Wait for user input
+
+;LASER ON AND PATH--------------------------------------------
+
+; Run 1 (P-, Z-, V-)
+H1=R1                                 ; Set power
+G1 Z=R21                              ; Set focal distance
+ID=1 WHEN $AC_TIMER[1]>=0 DO M50      ; Turn laser on
+G1 X=R31  F=R11                       ; Create weld bead
+ID=1 WHEN $AC_TIMER[1]>=0 DO M50      ; Turn laser off
+G1 X=-R31 Y=R30 F=R10                 ; Move to next position
+G4 F=R32                              ; Delay
+
+; Run 2 (P-, Z-, V+)
+H1=R1                                 ; Set power
+G1 Z=R21                              ; Set focal distance
+ID=1 WHEN $AC_TIMER[1]>=0 DO M50      ; Turn laser on
+G1 X=R31  F=R12                       ; Create weld bead
+ID=1 WHEN $AC_TIMER[1]>=0 DO M50      ; Turn laser off
+G1 X=-R31 Y=R30 F=R10                 ; Move to next position
+G4 F=R32                              ; Delay
+
+; Run 3 (P-, Z+, V-)
+H1=R1                                 ; Set power
+G1 Z=R22                              ; Set focal distance
+ID=1 WHEN $AC_TIMER[1]>=0 DO M50      ; Turn laser on
+G1 X=R31  F=R11                       ; Create weld bead
+ID=1 WHEN $AC_TIMER[1]>=0 DO M50      ; Turn laser off
+G1 X=-R31 Y=R30 F=R10                 ; Move to next position
+G4 F=R32                              ; Delay
+
+; Run 4 (P-, Z+, V+)
+H1=R1                                 ; Set power
+G1 Z=R22                              ; Set focal distance
+ID=1 WHEN $AC_TIMER[1]>=0 DO M50      ; Turn laser on
+G1 X=R31  F=R12                       ; Create weld bead
+ID=1 WHEN $AC_TIMER[1]>=0 DO M50      ; Turn laser off
+G1 X=-R31 Y=R30 F=R10                 ; Move to next position
+G4 F=R32                              ; Delay
+
+; Run 5 (P+, Z-, V-)
+H1=R2                                 ; Set power
+G1 Z=R21                              ; Set focal distance
+ID=1 WHEN $AC_TIMER[1]>=0 DO M50      ; Turn laser on
+G1 X=R31  F=R11                       ; Create weld bead
+ID=1 WHEN $AC_TIMER[1]>=0 DO M50      ; Turn laser off
+G1 X=-R31 Y=R30 F=R10                 ; Move to next position
+G4 F=R32                              ; Delay
+
+; Run 6 (P+, Z-, V+)
+H1=R2                                 ; Set power
+G1 Z=R21                              ; Set focal distance
+ID=1 WHEN $AC_TIMER[1]>=0 DO M50      ; Turn laser on
+G1 X=R31  F=R12                       ; Create weld bead
+ID=1 WHEN $AC_TIMER[1]>=0 DO M50      ; Turn laser off
+G1 X=-R31 Y=R30 F=R10                 ; Move to next position
+G4 F=R32                              ; Delay
+
+; Run 7 (P+, Z+, V-)
+H1=R2                                 ; Set power
+G1 Z=R22                              ; Set focal distance
+ID=1 WHEN $AC_TIMER[1]>=0 DO M50      ; Turn laser on
+G1 X=R31  F=R11                       ; Create weld bead
+ID=1 WHEN $AC_TIMER[1]>=0 DO M50      ; Turn laser off
+G1 X=-R31 Y=R30 F=R10                 ; Move to next position
+G4 F=R32                              ; Delay
+
+; Run 8 (P+, Z+, V+)
+H1=R2                                 ; Set power
+G1 Z=R22                              ; Set focal distance
+ID=1 WHEN $AC_TIMER[1]>=0 DO M50      ; Turn laser on
+G1 X=R31  F=R12                       ; Create weld bead
+ID=1 WHEN $AC_TIMER[1]>=0 DO M50      ; Turn laser off
+G1 X=-R31 Y=R30 F=R10                 ; Move to next position
+G4 F=R32                              ; Delay
+
+;End of Program--------------------------------------------
+N620 M77            ; Crossjet OFF
+N310 M79            ; Gas OFF
+N630 M55	          ; Home laser channel
+N640 M30		        ; End of program
