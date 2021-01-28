@@ -1,0 +1,61 @@
+;Author: Calil Amaral
+;Description: Welds nozzle in circular path on Z plane
+;V:2020.01.28
+ 
+;General Configurations-----------------------------------
+$AC_TIMER[1]=0	  ; START TIMER
+G91		            ; RELATIVE COORDINATES
+G71		            ; METRIC SYSTEM
+G64		            ; CONTINUOUS PATH MODE
+M55		            ; MOVE LASER MIRROR TO HOME
+G4F4		          ; DELAY 4 SECONDS
+M0	   	          ; WAIT FOR USER INPUT
+
+;R-Parameters----------------------------------------------
+R0=15             ; LASER POWER
+R1=325            ; FEED RATE PROCESS ON [mm/min]
+R2=1000           ; FEED RATE PROCESS OFF [mm/min]
+R3=14          	  ; CIRCLE DIAMETER [mm]
+R4=1              ; COUNTER START
+R5=3              ; NUMBER OF PASSES
+
+;Process Start-up------------------------------------------
+M56		            ; SET CHANNEL 1 AS LASER SOURCE
+G4F4		          ; DELAY 4 SECONDS TO POSITION THE MIRROR
+M78           	  ; GAS 1 ON
+M76            	  ; CROSSJET ON
+M0	   	  	      ; WAIT FOR USER INPUT
+M64		            ; CARRIER ON
+H2=R3	            ; SET POWDER FLOW
+M62		            ; POWDER MIXER ON
+M66		            ; POWDER FEED ON
+G4 F4	            ; DELAY FOR POWDER STABILIZATION
+ 
+;Laser On and Path-----------------------------------------
+G54
+G90
+G1 X0 Y0 Z0 F=R2
+G1 X0 Y=(R3/2) F=R1
+
+G2 X0 Y=(-R3/2) I0 J0 K0 F=R1     ; START CIRCLE WITH LASER OFF
+G2 X0 Y=(R3/2) I0 J0 K0 F=R1      ; FINISH CIRCLE WITH LASER OFF
+
+H1=R0
+ID=1 WHEN $AC_TIMER[1]>=0 DO M50
+WHILE(R4<=R5)                     ; R5 CIRCLES WITH LASER ON
+  G2 X0 Y=(-R3/2) I0 J0 K0 F=R1
+  G2 X0 Y=(R3/2) I0 J0 K0 F=R1
+  R4 = R4 + 1
+ENDWHILE
+
+ID=1 WHEN $AC_TIMER[1]>=0 DO M51  ; LASER OFF
+
+;End of Program--------------------------------------------
+;M65		            ; CARRIER OFF
+;M63		            ; POWDER MIXER OFF
+;M67		            ; POWDER FEED OFF
+;M77                ; CROSSJET OFF
+M55		              ; HOME LASER RESSONATOR
+G4 F3               ; DELAY
+M79                 ; GAS 1 OFF
+M30		              ; PROGRAM END
