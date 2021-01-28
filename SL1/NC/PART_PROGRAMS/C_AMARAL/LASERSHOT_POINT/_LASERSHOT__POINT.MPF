@@ -4,33 +4,33 @@
  
 ;General Configurations-----------------------------------
 N100 $AC_TIMER[1]=0	;Start Timer
-N110 G91		; Relative Coordinates
-N120 G71		; Metric System
-N130 G64		; Continuous path mode
-N140 M55		; Move laser mirror to home
-N150 G4F4		; Delay in 4 seconds the process
-N270 M0	   	; Wait for user-input
+N110 G91		; RELATIVE COORDINATES
+N120 G71		; METRIC SYSTEM
+N130 G64		; CONTINUOUS PATH MODE
+N140 M55		; MOVE LASER MIRROR TO HOME
+N150 G4F4		; DELAY 4 SECONDS
+N270 M0	   	; WAIT FOR USER INPUT
 
 ;R-Parameters----------------------------------------------
-N170 R0=15             	;Laser Power
-N180 R1=0              	;Feed Rate PROCESS ON
-N190 R2=0              	;Feed Rate PROCESS OFF
-N200 R3=0          		;Powder Flow
+N170 R0=15            ;LASER POWER
+N180 R1=0             ;FEED RATE PROCESS ON
+N190 R2=0             ;FEED RATE PROCESS OFF
+N200 R3=0          		;POWDER FLOW
 N210 R4=0          		;X-AXIS
 
 ;Process Start-up------------------------------------------
-N240 M56		           ;set channel 1 as laser-source 
-N250 G4F4		          ;necessary delay for positioning of the mirror
-N260 M78           	    ;GAS 1 ON
-;N260 M76            	  ;CROSSJET ON
-N270 M0	   	  	   ;wait for user-input
+N240 M56		          ;SET CHANNEL 1 AS LASER SOURCE
+N250 G4F4		          ;DELAY 4 SECONDS TO POSITION THE MIRROR
+N260 M78           	  ;GAS 1 ON
+;N260 M76            	;CROSSJET ON
+N270 M0	   	  	      ;WAIT FOR USER INPUT
  
 ;Laser On and Path-----------------------------------------
 
-N280 M64		;CARRIER ON
+N280 M64		  ;CARRIER ON
 ;N290 H2=R3	  ;SET POWDER FLOW
-;N300 M62		;POWDER MIXER ON
-;N310 M66		;POWDER FEED ON
+;N300 M62		  ;POWDER MIXER ON
+;N310 M66		  ;POWDER FEED ON
 ;N320 G4 F4	  ;DELAY FOR POWDER STABILIZATION
 
 N330 H1=R0
@@ -46,5 +46,5 @@ N330 M65		;CARRIER OFF
 N360 G4 F3
 ;N320 M77       ;CROSSJET OFF
 N370 M79        ;GAS 1 OFF
-N380 M55		;home laser ressonator
-N390 M30		;program end
+N380 M55		    ;HOME LASER RESSONATOR
+N390 M30		    ;PROGRAM END
